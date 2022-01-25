@@ -1,0 +1,6 @@
+build/
+bin/
+x64/
+.vs/
+.github/**
+SDL2.dll
