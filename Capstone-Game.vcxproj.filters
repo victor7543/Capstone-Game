@@ -44,10 +44,18 @@
     <ClInclude Include="src\snake.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="snake_game.gif">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shapes.json">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

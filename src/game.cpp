@@ -83,14 +83,28 @@ void Game::Update() {
         snake = make_unique<Snake>(_grid_width, _grid_height);
     }
     else {
+        SDL_Point prev_cell{
+            static_cast<int>(snake->head_x),
+            static_cast<int>(snake->head_y) 
+        };
         snake->prev_head_x = snake->head_x;
         snake->prev_head_y = snake->head_y;
         snake->Update();
+        SDL_Point current_cell{
+            static_cast<int>(snake->head_x),
+            static_cast<int>(snake->head_y)
+        };
         for (auto const& item : snake_vec) {
-            if ((std::fabs((static_cast<int>(snake->head_x) - static_cast<int>(item->head_x))) < 1.0) && (std::fabs(static_cast<int>(item->head_y) - static_cast<int>(snake->head_y)) < 1.0)) {
-                snake->head_x = snake->prev_head_x;
-                snake->head_y = snake->prev_head_y;
-                snake->alive = false;
+            if (current_cell.x != prev_cell.x || current_cell.y != prev_cell.y) {
+                SDL_Point item_cell{
+                    static_cast<int>(item->head_x),
+                    static_cast<int>(item->head_y)
+                };
+                if (current_cell.x == item_cell.x && current_cell.y == item_cell.y) {
+                    snake->head_x = snake->prev_head_x;
+                    snake->head_y = snake->prev_head_y;
+                    snake->alive = false;
+                }
             }
         }
     }

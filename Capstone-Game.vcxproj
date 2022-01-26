@@ -78,7 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>I:\SDL2\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\git\Capstone-Game\Capstone-Game;I:\SDL2\include;$(IncludePath)</IncludePath>
     <LibraryPath>I:\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,6 +158,7 @@
     <ClCompile Include="src\snake.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="src\controller.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\renderer.h" />
@@ -165,6 +166,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="snake_game.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shapes.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
