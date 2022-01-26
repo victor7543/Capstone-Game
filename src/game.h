@@ -2,10 +2,15 @@
 #define GAME_H
 
 #include <random>
+#include <memory>
+#include <chrono>
 #include "SDL.h"
 #include "controller.h"
 #include "renderer.h"
 #include "snake.h"
+
+using std::vector;
+using std::unique_ptr;
 
 class Game {
  public:
@@ -16,7 +21,8 @@ class Game {
   int GetSize() const;
 
  private:
-  Snake snake;
+  unique_ptr<Snake> snake;
+  vector<unique_ptr<Snake>> snake_vec;
   SDL_Point food;
 
   std::random_device dev;
@@ -25,6 +31,8 @@ class Game {
   std::uniform_int_distribution<int> random_h;
 
   int score{0};
+  size_t _grid_width;
+  size_t _grid_height;
 
   void PlaceFood();
   void Update();

@@ -2,16 +2,20 @@
 #include <iostream>
 #include "SDL.h"
 
-Game::Game(std::size_t grid_width, std::size_t grid_height)
-    : snake(grid_width, grid_height),
-      engine(dev()),
+using std::make_unique;
+using std::size_t;
+
+Game::Game(size_t grid_width, size_t grid_height)
+    : engine(dev()),
+      _grid_height(grid_height),
+      _grid_width(grid_width),
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
-  PlaceFood();
+  snake = make_unique<Snake>(grid_width, grid_height);
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
-               std::size_t target_frame_duration) {
+               size_t target_frame_duration) {
   Uint32 title_timestamp = SDL_GetTicks();
   Uint32 frame_start;
   Uint32 frame_end;
@@ -23,9 +27,9 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
-    controller.HandleInput(running, snake);
+    controller.HandleInput(running, *snake);
     Update();
-    renderer.Render(snake, food);
+    renderer.Render(snake_vec , *snake, food);
 
     frame_end = SDL_GetTicks();
 
@@ -52,12 +56,20 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 
 void Game::PlaceFood() {
   int x, y;
+  bool first_time = true;
   while (true) {
-    x = random_w(engine);
-    y = random_h(engine);
+      if (first_time) {
+          x = 16;
+          y = 31;
+          first_time = false;
+      }
+      else {
+          x = random_w(engine);
+          y = random_h(engine);
+      }
     // Check that the location is not occupied by a snake item before placing
     // food.
-    if (!snake.SnakeCell(x, y)) {
+    if (!snake->SnakeCell(x, y)) {
       food.x = x;
       food.y = y;
       return;
@@ -66,22 +78,28 @@ void Game::PlaceFood() {
 }
 
 void Game::Update() {
-  if (!snake.alive) return;
+    if (!snake->alive) {
+        snake_vec.emplace_back(std::move(snake));
+        snake = make_unique<Snake>(_grid_width, _grid_height);
+    }
+    else {
+        snake->prev_head_x = snake->head_x;
+        snake->prev_head_y = snake->head_y;
+        snake->Update();
+        for (auto const& item : snake_vec) {
+            if ((std::fabs((static_cast<int>(snake->head_x) - static_cast<int>(item->head_x))) < 1.0) && (std::fabs(static_cast<int>(item->head_y) - static_cast<int>(snake->head_y)) < 1.0)) {
+                snake->head_x = snake->prev_head_x;
+                snake->head_y = snake->prev_head_y;
+                snake->alive = false;
+            }
+        }
+    }
 
-  snake.Update();
 
-  int new_x = static_cast<int>(snake.head_x);
-  int new_y = static_cast<int>(snake.head_y);
+  int new_x = static_cast<int>(snake->head_x);
+  int new_y = static_cast<int>(snake->head_y);
 
-  // Check if there's food over here
-  if (food.x == new_x && food.y == new_y) {
-    score++;
-    PlaceFood();
-    // Grow snake and increase speed.
-    snake.GrowBody();
-    snake.speed += 0.02;
-  }
 }
 
 int Game::GetScore() const { return score; }
-int Game::GetSize() const { return snake.size; }
+int Game::GetSize() const { return snake->size; }

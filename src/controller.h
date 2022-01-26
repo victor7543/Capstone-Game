@@ -1,6 +1,5 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
-
 #include "snake.h"
 
 class Controller {
@@ -8,8 +7,7 @@ class Controller {
   void HandleInput(bool &running, Snake &snake) const;
 
  private:
-  void ChangeDirection(Snake &snake, Snake::Direction input,
-                       Snake::Direction opposite) const;
+  void ChangeDirection(Snake &snake, Snake::Direction input) const;
 };
 
 #endif
