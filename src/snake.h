@@ -33,9 +33,8 @@ class Snake {
               std::vector<std::string> s{ "t1", "t2", "t3", "t4" };
               for(auto x : s) {
                   if (c.key() == x) {
-                      std::vector<int> e = c.value();
-                      SDL_Point d{ e[0] + head_x, e[1] + head_y};
-                      body.push_back(d);
+                      std::vector<float> e = c.value();
+                      body.push_back(std::pair<float, float>(e[0] + head_x, e[1] + head_y));
                       std::cout << c.key() << "\t" << c.value() << std::endl;
                   }
               }
@@ -46,24 +45,19 @@ class Snake {
   }
 
   void Update();
-  bool SnakeCell(int x, int y);
 
   Direction direction = Direction::kDown;
 
   float speed_x{1.0f};
-  float speed_y{0.0165f};
+  float speed_y{0.0165};
   int size{1};
   bool alive{true};
   float head_x;
   float head_y;
-  float prev_head_x;
-  float prev_head_y;
-  std::vector<SDL_Point> body;
+  std::pair<float, float> prev_block_pos;
+  std::vector<std::pair<float, float>> body;
 
  private:
-  void UpdateHead();
-  void UpdateBody(SDL_Point &current_cell, SDL_Point &prev_cell);
-
   bool growing{false};
   Direction prev_dir = Direction::kNeutral;
   int grid_width;

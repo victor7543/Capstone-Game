@@ -60,9 +60,9 @@ void Renderer::RenderSnake(Snake const& snake, SDL_Rect& block)
 {
     // Render snake's body
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-    for (SDL_Point const& point : snake.body) {
-        block.x = point.x * block.w;
-        block.y = point.y * block.h;
+    for (int i = 0; i < snake.body.size(); i++) {
+        block.x = static_cast<int>(snake.body[i].first) * block.w;
+        block.y = static_cast<int>(snake.body[i].second) * block.h;
         SDL_RenderFillRect(sdl_renderer, &block);
     }
 

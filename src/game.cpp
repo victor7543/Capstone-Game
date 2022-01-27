@@ -67,13 +67,6 @@ void Game::PlaceFood() {
           x = random_w(engine);
           y = random_h(engine);
       }
-    // Check that the location is not occupied by a snake item before placing
-    // food.
-    if (!snake->SnakeCell(x, y)) {
-      food.x = x;
-      food.y = y;
-      return;
-    }
   }
 }
 
@@ -83,36 +76,46 @@ void Game::Update() {
         snake = make_unique<Snake>(_grid_width, _grid_height);
     }
     else {
-        SDL_Point prev_cell{
-            static_cast<int>(snake->head_x),
-            static_cast<int>(snake->head_y) 
-        };
-        snake->prev_head_x = snake->head_x;
-        snake->prev_head_y = snake->head_y;
+        auto& shape = snake->body;
+        auto prev_body = shape;
+        vector<SDL_Point> prev_blocks;
+        for (auto& block : shape) {
+            prev_blocks.emplace_back(std::move(SDL_Point(
+                static_cast<int>(block.first),
+                static_cast<int>(block.second)
+            )));
+        }
         snake->Update();
-        SDL_Point current_cell{
-            static_cast<int>(snake->head_x),
-            static_cast<int>(snake->head_y)
-        };
-        for (auto const& item : snake_vec) {
-            if (current_cell.x != prev_cell.x || current_cell.y != prev_cell.y) {
-                SDL_Point item_cell{
-                    static_cast<int>(item->head_x),
-                    static_cast<int>(item->head_y)
-                };
-                if (current_cell.x == item_cell.x && current_cell.y == item_cell.y) {
-                    snake->head_x = snake->prev_head_x;
-                    snake->head_y = snake->prev_head_y;
-                    snake->alive = false;
+        for (int i = 0; i < shape.size(); i++) {
+            snake->prev_block_pos = shape[i];
+            SDL_Point current_cell{
+                static_cast<int>(shape[i].first),
+                static_cast<int>(shape[i].second)
+            };
+            for (auto const& static_shape : snake_vec) {
+                for (auto& static_block : static_shape->body) {
+                    if (current_cell.x != prev_blocks[i].x || current_cell.y != prev_blocks[i].y) {
+                        SDL_Point stc_block_cell{
+                            static_cast<int>(static_block.first),
+                            static_cast<int>(static_block.second)
+                        };
+                        if (current_cell.x == stc_block_cell.x && current_cell.y == stc_block_cell.y) {
+                            if ((prev_blocks[i].x == current_cell.x)) {
+                                shape = prev_body;
+                                snake->alive = false;
+                                return;
+                            }
+                            else {
+                                for (int j = 0; j < shape.size(); j++) {
+                                    shape[j].first = prev_body[j].first;
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
-
-
-  int new_x = static_cast<int>(snake->head_x);
-  int new_y = static_cast<int>(snake->head_y);
-
 }
 
 int Game::GetScore() const { return score; }
