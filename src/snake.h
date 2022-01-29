@@ -34,6 +34,7 @@ class Snake {
               for(auto x : s) {
                   if (c.key() == x) {
                       std::vector<float> e = c.value();
+                      init_value.push_back(std::pair<float, float>(e[0], e[1]));
                       body.push_back(std::pair<float, float>(e[0] + head_x, e[1] + head_y));
                       std::cout << c.key() << "\t" << c.value() << std::endl;
                   }
@@ -56,6 +57,7 @@ class Snake {
   float head_y;
   std::pair<float, float> prev_block_pos;
   std::vector<std::pair<float, float>> body;
+  std::vector<std::pair<float, float>> init_value;
 
  private:
   bool growing{false};

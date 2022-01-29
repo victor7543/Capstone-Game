@@ -101,14 +101,20 @@ void Game::Update() {
                         };
                         if (current_cell.x == stc_block_cell.x && current_cell.y == stc_block_cell.y) {
                             if ((prev_blocks[i].x == current_cell.x)) {
-                                shape = prev_body;
+                                shape[0] = prev_body[0];
+                                for (int j = 1; j < shape.size(); j++) {
+                                    shape[j].first = shape[0].first + snake->init_value[j].first;
+                                    shape[j].second = shape[0].second + snake->init_value[j].second;
+                                }
                                 snake->alive = false;
                                 return;
                             }
                             else {
-                                for (int j = 0; j < shape.size(); j++) {
-                                    shape[j].first = prev_body[j].first;
+                                shape[0].first = prev_body[0].first;
+                                for (int j = 1; j < shape.size(); j++) {
+                                    shape[j].first = shape[0].first + snake->init_value[j].first;
                                 }
+                                return;
                             }
                         }
                     }
