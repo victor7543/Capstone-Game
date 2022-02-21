@@ -2,15 +2,11 @@
 #define SNAKE_H
 
 #include <vector>
-#include <chrono>
 #include <fstream>
 #include <iostream>
 #include "SDL.h"
 #include "json.hpp"
 
-using std::chrono::steady_clock;
-using std::chrono::duration_cast;
-using std::chrono::milliseconds;
 using json = nlohmann::json;
 
 class Snake {
@@ -23,7 +19,7 @@ class Snake {
         grid_height(grid_height),
         head_x(grid_width / 2),
         head_y(0.0),
-        key_pressed_timer(steady_clock::now()) 
+        key_pressed_timer(SDL_GetTicks()) 
   {
       std::ifstream stream("shapes.json");
       stream >> j;
@@ -64,10 +60,10 @@ class Snake {
   Direction prev_dir = Direction::kNeutral;
   int grid_width;
   int grid_height;
-  steady_clock::time_point key_pressed_timer;
-  steady_clock::time_point now;
-  int time_diff;
-  int time_threshold = 200;
+  Uint32 key_pressed_timer;
+  Uint32 now;
+  Uint32 time_diff;
+  Uint32 time_threshold = 200;
   json j;
 };
 

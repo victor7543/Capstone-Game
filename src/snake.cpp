@@ -3,13 +3,13 @@
 #include <iostream>
 
 void Snake::Update() {
-    now = steady_clock::now();
-    time_diff = duration_cast<milliseconds>(now - key_pressed_timer).count();
+    now = SDL_GetTicks();
+    time_diff = (now - key_pressed_timer);
     auto prev_body = body;
     if (prev_dir != direction || time_diff >= time_threshold) {
         float temp_speed_x = speed_x;
         if (time_diff < time_threshold) {
-            key_pressed_timer = steady_clock::now();
+            key_pressed_timer =SDL_GetTicks();
         }
         else {
             temp_speed_x = speed_x / 5.0;
@@ -40,7 +40,7 @@ void Snake::Update() {
                 prev_dir = Direction::kRight;
                 break;
             default:
-                key_pressed_timer = steady_clock::now();
+                key_pressed_timer = SDL_GetTicks();
                 prev_dir = Direction::kNeutral;
         }
     }
