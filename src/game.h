@@ -6,7 +6,7 @@
 #include "SDL.h"
 #include "controller.h"
 #include "renderer.h"
-#include "snake.h"
+#include "shape.h"
 
 using std::vector;
 using std::unique_ptr;
@@ -17,12 +17,10 @@ class Game {
   void Run(Controller const &controller, Renderer &renderer,
            std::size_t target_frame_duration);
   int GetScore() const;
-  int GetSize() const;
 
  private:
-  unique_ptr<Snake> snake;
-  vector<unique_ptr<Snake>> snake_vec;
-  SDL_Point food;
+  unique_ptr<Shape> shape_ptr;
+  vector<unique_ptr<Shape>> shape_vec;
 
   std::random_device dev;
   std::mt19937 engine;
@@ -33,7 +31,6 @@ class Game {
   size_t _grid_width;
   size_t _grid_height;
 
-  void PlaceFood();
   void Update();
 };
 

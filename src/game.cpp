@@ -11,7 +11,7 @@ Game::Game(size_t grid_width, size_t grid_height)
       _grid_width(grid_width),
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
-  snake = make_unique<Snake>(grid_width, grid_height);
+          shape_ptr = make_unique<Shape>(grid_width, grid_height);
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -27,9 +27,9 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
-    controller.HandleInput(running, *snake);
+    controller.HandleInput(running, *shape_ptr);
     Update();
-    renderer.Render(snake_vec , *snake, food);
+    renderer.Render(shape_vec , *shape_ptr);
 
     frame_end = SDL_GetTicks();
 
@@ -54,65 +54,49 @@ void Game::Run(Controller const &controller, Renderer &renderer,
   }
 }
 
-void Game::PlaceFood() {
-  int x, y;
-  bool first_time = true;
-  while (true) {
-      if (first_time) {
-          x = 16;
-          y = 31;
-          first_time = false;
-      }
-      else {
-          x = random_w(engine);
-          y = random_h(engine);
-      }
-  }
-}
-
 void Game::Update() {
-    if (!snake->alive) {
-        snake_vec.emplace_back(std::move(snake));
-        snake = make_unique<Snake>(_grid_width, _grid_height);
+    if (!shape_ptr->is_falling) {
+        shape_vec.emplace_back(std::move(shape_ptr));
+        shape_ptr = make_unique<Shape>(_grid_width, _grid_height);
     }
     else {
-        auto& shape = snake->body;
-        auto prev_body = shape;
-        vector<SDL_Point> prev_blocks;
-        for (auto& block : shape) {
-            prev_blocks.emplace_back(std::move(SDL_Point(
-                static_cast<int>(block.first),
-                static_cast<int>(block.second)
+        auto& shape = shape_ptr->shape_cells;
+        auto prev_shape = shape;
+        vector<SDL_Point> prev_cells;
+        for (auto& cell : shape) {
+            prev_cells.emplace_back(std::move(SDL_Point(
+                static_cast<int>(cell.first),
+                static_cast<int>(cell.second)
             )));
         }
-        snake->Update();
+        shape_ptr->Update();
         for (int i = 0; i < shape.size(); i++) {
-            snake->prev_block_pos = shape[i];
+            shape_ptr->prev_block_pos = shape[i];
             SDL_Point current_cell{
                 static_cast<int>(shape[i].first),
                 static_cast<int>(shape[i].second)
             };
-            for (auto const& static_shape : snake_vec) {
-                for (auto& static_block : static_shape->body) {
-                    if (current_cell.x != prev_blocks[i].x || current_cell.y != prev_blocks[i].y) {
-                        SDL_Point stc_block_cell{
+            for (auto const& static_shape : shape_vec) {
+                for (auto& static_block : static_shape->shape_cells) {
+                    if (current_cell.x != prev_cells[i].x || current_cell.y != prev_cells[i].y) {
+                        SDL_Point stc_block_cell {
                             static_cast<int>(static_block.first),
                             static_cast<int>(static_block.second)
                         };
                         if (current_cell.x == stc_block_cell.x && current_cell.y == stc_block_cell.y) {
-                            if ((prev_blocks[i].x == current_cell.x)) {
-                                shape[0] = prev_body[0];
+                            if ((prev_cells[i].x == current_cell.x)) {
+                                shape[0] = prev_shape[0];
                                 for (int j = 1; j < shape.size(); j++) {
-                                    shape[j].first = shape[0].first + snake->init_value[j].first;
-                                    shape[j].second = shape[0].second + snake->init_value[j].second;
+                                    shape[j].first = shape[0].first + shape_ptr->init_value[j].first;
+                                    shape[j].second = shape[0].second + shape_ptr->init_value[j].second;
                                 }
-                                snake->alive = false;
+                                shape_ptr->is_falling = false;
                                 return;
                             }
                             else {
-                                shape[0].first = prev_body[0].first;
+                                shape[0].first = prev_shape[0].first;
                                 for (int j = 1; j < shape.size(); j++) {
-                                    shape[j].first = shape[0].first + snake->init_value[j].first;
+                                    shape[j].first = shape[0].first + shape_ptr->init_value[j].first;
                                 }
                                 return;
                             }
@@ -125,4 +109,3 @@ void Game::Update() {
 }
 
 int Game::GetScore() const { return score; }
-int Game::GetSize() const { return snake->size; }

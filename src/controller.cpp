@@ -1,14 +1,14 @@
 #include <iostream>
 #include "controller.h"
 #include "SDL.h"
-#include "snake.h"
+#include "shape.h"
 
-void Controller::ChangeDirection(Snake& snake, Snake::Direction input) const {
-    snake.direction = input;
+void Controller::ChangeDirection(Shape& shape, Shape::Direction input) const {
+    shape.direction = input;
     return;
 }
 
-void Controller::HandleInput(bool& running, Snake& snake) const {
+void Controller::HandleInput(bool& running, Shape& shape) const {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {
@@ -17,18 +17,18 @@ void Controller::HandleInput(bool& running, Snake& snake) const {
     }
     const Uint8* keystates = SDL_GetKeyboardState(NULL);
     if (keystates[SDL_SCANCODE_UP]) {
-        ChangeDirection(snake, Snake::Direction::kUp);
+        ChangeDirection(shape, Shape::Direction::kUp);
     }
     else if (keystates[SDL_SCANCODE_LEFT]) {
-        ChangeDirection(snake, Snake::Direction::kLeft);
+        ChangeDirection(shape, Shape::Direction::kLeft);
     }
     else if (keystates[SDL_SCANCODE_RIGHT]) {
-        ChangeDirection(snake, Snake::Direction::kRight);
+        ChangeDirection(shape, Shape::Direction::kRight);
     }
     else if (keystates[SDL_SCANCODE_DOWN]) {
-        ChangeDirection(snake, Snake::Direction::kDown);
+        ChangeDirection(shape, Shape::Direction::kDown);
     }
     else {
-        ChangeDirection(snake, Snake::Direction::kNeutral);
+        ChangeDirection(shape, Shape::Direction::kNeutral);
     }
 }
