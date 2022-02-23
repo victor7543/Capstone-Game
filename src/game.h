@@ -20,7 +20,7 @@ class Game {
 
  private:
   unique_ptr<Shape> shape_ptr;
-  vector<unique_ptr<Shape>> shape_vec;
+  vector<SDL_Point> filled_cells;
 
   std::random_device dev;
   std::mt19937 engine;

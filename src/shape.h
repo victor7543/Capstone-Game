@@ -29,12 +29,12 @@ class Shape {
                   if (c.key() == x) {
                       std::vector<float> e = c.value();
                       init_value.push_back(std::pair<float, float>(e[0], e[1]));
-                      shape_cells.push_back(std::pair<float, float>(e[0] + grid_width/2, e[1]));
+                      shape_pos.push_back(std::pair<float, float>(e[0] + grid_width/2, e[1]));
                       std::cout << c.key() << "\t" << c.value() << std::endl;
                   }
               }
           }
-          if (!shape_cells.empty())
+          if (!shape_pos.empty())
               break;
       }
   }
@@ -48,7 +48,7 @@ class Shape {
   int size{1};
   bool is_falling{true};
   std::pair<float, float> prev_block_pos;
-  std::vector<std::pair<float, float>> shape_cells;
+  std::vector<std::pair<float, float>> shape_pos;
   std::vector<std::pair<float, float>> init_value;
 
  private:

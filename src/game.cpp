@@ -29,7 +29,7 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     // Input, Update, Render - the main game loop.
     controller.HandleInput(running, *shape_ptr);
     Update();
-    renderer.Render(shape_vec , *shape_ptr);
+    renderer.Render(filled_cells , *shape_ptr);
 
     frame_end = SDL_GetTicks();
 
@@ -55,20 +55,21 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 }
 
 void Game::Update() {
+    auto& shape = shape_ptr->shape_pos;
+    vector<SDL_Point> position;
+    for (auto& cell : shape) {
+        position.emplace_back(std::move(SDL_Point(
+            static_cast<int>(cell.first),
+            static_cast<int>(cell.second)
+        )));
+    }
     if (!shape_ptr->is_falling) {
-        shape_vec.emplace_back(std::move(shape_ptr));
+        filled_cells.insert(std::end(filled_cells), std::begin(position), std::end(position));
         shape_ptr = make_unique<Shape>(_grid_width, _grid_height);
     }
     else {
-        auto& shape = shape_ptr->shape_cells;
         auto prev_shape = shape;
-        vector<SDL_Point> prev_cells;
-        for (auto& cell : shape) {
-            prev_cells.emplace_back(std::move(SDL_Point(
-                static_cast<int>(cell.first),
-                static_cast<int>(cell.second)
-            )));
-        }
+        vector<SDL_Point> prev_position = position;
         shape_ptr->Update();
         for (int i = 0; i < shape.size(); i++) {
             shape_ptr->prev_block_pos = shape[i];
@@ -76,35 +77,29 @@ void Game::Update() {
                 static_cast<int>(shape[i].first),
                 static_cast<int>(shape[i].second)
             };
-            for (auto const& static_shape : shape_vec) {
-                for (auto& static_block : static_shape->shape_cells) {
-                    if (current_cell.x != prev_cells[i].x || current_cell.y != prev_cells[i].y) {
-                        SDL_Point stc_block_cell {
-                            static_cast<int>(static_block.first),
-                            static_cast<int>(static_block.second)
-                        };
-                        if (current_cell.x == stc_block_cell.x && current_cell.y == stc_block_cell.y) {
-                            if ((prev_cells[i].x == current_cell.x)) {
-                                shape[0] = prev_shape[0];
-                                for (int j = 1; j < shape.size(); j++) {
-                                    shape[j].first = shape[0].first + shape_ptr->init_value[j].first;
-                                    shape[j].second = shape[0].second + shape_ptr->init_value[j].second;
-                                }
-                                shape_ptr->is_falling = false;
-                                return;
+            for (auto const& cell : filled_cells) {
+                if (current_cell.x != prev_position[i].x || current_cell.y != prev_position[i].y) {
+                    if (current_cell.x == cell.x && current_cell.y == cell.y) {
+                        if ((prev_position[i].x == current_cell.x)) {
+                            shape[0] = prev_shape[0];
+                            for (int j = 1; j < shape.size(); j++) {
+                                shape[j].first = shape[0].first + shape_ptr->init_value[j].first;
+                                shape[j].second = shape[0].second + shape_ptr->init_value[j].second;
                             }
-                            else {
-                                shape[0].first = prev_shape[0].first;
-                                for (int j = 1; j < shape.size(); j++) {
-                                    shape[j].first = shape[0].first + shape_ptr->init_value[j].first;
-                                }
-                                return;
+                            shape_ptr->is_falling = false;
+                            return;
+                        }
+                        else {
+                            shape[0].first = prev_shape[0].first;
+                            for (int j = 1; j < shape.size(); j++) {
+                                shape[j].first = shape[0].first + shape_ptr->init_value[j].first;
                             }
+                            return;
                         }
                     }
                 }
             }
-        }
+        }   
     }
 }
 
