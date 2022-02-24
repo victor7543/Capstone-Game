@@ -1,13 +1,13 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
-#include "shape.h"
+#include "piece.h"
 
 class Controller {
  public:
-  void HandleInput(bool &running, Shape &shape) const;
+  void HandleInput(bool &running, Piece &piece) const;
 
  private:
-  void ChangeDirection(Shape &shape, Shape::Direction input) const;
+  void ChangeDirection(Piece &piece, Piece::Direction input) const;
 };
 
 #endif

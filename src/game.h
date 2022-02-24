@@ -6,10 +6,11 @@
 #include "SDL.h"
 #include "controller.h"
 #include "renderer.h"
-#include "shape.h"
+#include "piece.h"
 
 using std::vector;
 using std::unique_ptr;
+using std::pair;
 
 class Game {
  public:
@@ -19,7 +20,7 @@ class Game {
   int GetScore() const;
 
  private:
-  unique_ptr<Shape> shape_ptr;
+  unique_ptr<Piece> contolled_piece;
   vector<SDL_Point> filled_cells;
 
   std::random_device dev;
@@ -32,6 +33,7 @@ class Game {
   size_t _grid_height;
 
   void Update();
+  void DetectCollision(vector<pair<float, float>> &prev_piece, vector<SDL_Point> &prev_cell);
 };
 
 #endif

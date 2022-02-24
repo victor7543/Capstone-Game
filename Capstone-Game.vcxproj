@@ -155,17 +155,17 @@
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\renderer.cpp" />
-    <ClCompile Include="src\shape.cpp" />
+    <ClCompile Include="src\piece.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="json.hpp" />
     <ClInclude Include="src\controller.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\renderer.h" />
-    <ClInclude Include="src\shape.h" />
+    <ClInclude Include="src\piece.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shapes.json" />
+    <None Include="pieces.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

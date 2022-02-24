@@ -38,7 +38,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(std::vector<SDL_Point>& cells_vec, Shape const &shape) {
+void Renderer::Render(std::vector<SDL_Point>& cells_vec, Piece const &piece) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -48,19 +48,19 @@ void Renderer::Render(std::vector<SDL_Point>& cells_vec, Shape const &shape) {
   SDL_RenderClear(sdl_renderer);
 
   for (int i = 0; i < cells_vec.size(); i++) {
-      RenderShape(cells_vec[i], block);
+      RenderPiece(cells_vec[i], block);
   } 
-  for (auto& cell : shape.shape_pos) {
-      RenderShape(SDL_Point(static_cast<int>(cell.first), static_cast<int>(cell.second)), block);
+  for (auto& cell : piece.piece_pos) {
+      RenderPiece(SDL_Point(static_cast<int>(cell.first), static_cast<int>(cell.second)), block);
   }
 
   // Update Screen
   SDL_RenderPresent(sdl_renderer);
 }
 
-void Renderer::RenderShape(SDL_Point const& point, SDL_Rect& block)
+void Renderer::RenderPiece(SDL_Point const& point, SDL_Rect& block)
 {
-    // Render shape
+    // Render piece
     SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
     block.x = static_cast<int>(point.x) * block.w;
     block.y = static_cast<int>(point.y) * block.h;

@@ -11,7 +11,7 @@ Game::Game(size_t grid_width, size_t grid_height)
       _grid_width(grid_width),
       random_w(0, static_cast<int>(grid_width - 1)),
       random_h(0, static_cast<int>(grid_height - 1)) {
-          shape_ptr = make_unique<Shape>(grid_width, grid_height);
+          contolled_piece = make_unique<Piece>(grid_width, grid_height);
 }
 
 void Game::Run(Controller const &controller, Renderer &renderer,
@@ -27,9 +27,9 @@ void Game::Run(Controller const &controller, Renderer &renderer,
     frame_start = SDL_GetTicks();
 
     // Input, Update, Render - the main game loop.
-    controller.HandleInput(running, *shape_ptr);
+    controller.HandleInput(running, *contolled_piece);
     Update();
-    renderer.Render(filled_cells , *shape_ptr);
+    renderer.Render(filled_cells , *contolled_piece);
 
     frame_end = SDL_GetTicks();
 
@@ -55,51 +55,56 @@ void Game::Run(Controller const &controller, Renderer &renderer,
 }
 
 void Game::Update() {
-    auto& shape = shape_ptr->shape_pos;
     vector<SDL_Point> position;
-    for (auto& cell : shape) {
+    for (auto& cell : contolled_piece->piece_pos) {
         position.emplace_back(std::move(SDL_Point(
             static_cast<int>(cell.first),
             static_cast<int>(cell.second)
         )));
     }
-    if (!shape_ptr->is_falling) {
+    if (!contolled_piece->is_falling) {
         filled_cells.insert(std::end(filled_cells), std::begin(position), std::end(position));
-        shape_ptr = make_unique<Shape>(_grid_width, _grid_height);
+        contolled_piece = make_unique<Piece>(_grid_width, _grid_height);
     }
     else {
-        auto prev_shape = shape;
-        vector<SDL_Point> prev_position = position;
-        shape_ptr->Update();
-        for (int i = 0; i < shape.size(); i++) {
-            shape_ptr->prev_block_pos = shape[i];
-            SDL_Point current_cell{
-                static_cast<int>(shape[i].first),
-                static_cast<int>(shape[i].second)
-            };
-            for (auto const& cell : filled_cells) {
-                if (current_cell.x != prev_position[i].x || current_cell.y != prev_position[i].y) {
-                    if (current_cell.x == cell.x && current_cell.y == cell.y) {
-                        if ((prev_position[i].x == current_cell.x)) {
-                            shape[0] = prev_shape[0];
-                            for (int j = 1; j < shape.size(); j++) {
-                                shape[j].first = shape[0].first + shape_ptr->init_value[j].first;
-                                shape[j].second = shape[0].second + shape_ptr->init_value[j].second;
-                            }
-                            shape_ptr->is_falling = false;
-                            return;
+        auto prev_pos = contolled_piece->piece_pos;
+        vector<SDL_Point> prev_cell = position;
+        contolled_piece->Move();
+        DetectCollision(prev_pos, prev_cell);
+    }
+}
+
+void Game::DetectCollision(vector<pair<float, float>> &prev_pos, vector<SDL_Point> &prev_cell)
+{
+    auto& piece = contolled_piece->piece_pos;
+    for (int i = 0; i < piece.size(); i++) {
+        contolled_piece->prev_block_pos = piece[i];
+        SDL_Point current_cell{
+            static_cast<int>(piece[i].first),
+            static_cast<int>(piece[i].second)
+        };
+        for (auto const& cell : filled_cells) {
+            if (current_cell.x != prev_cell[i].x || current_cell.y != prev_cell[i].y) { // The piece has changed cells since last update
+                if (current_cell.x == cell.x && current_cell.y == cell.y) { // The piece is intersecting with a filled cell.
+                    if (current_cell.x == prev_cell[i].x) {
+                        piece[0] = prev_pos[0];
+                        for (int j = 1; j < piece.size(); j++) {
+                            piece[j].first = piece[0].first + contolled_piece->init_value[j].first;
+                            piece[j].second = piece[0].second + contolled_piece->init_value[j].second;
                         }
-                        else {
-                            shape[0].first = prev_shape[0].first;
-                            for (int j = 1; j < shape.size(); j++) {
-                                shape[j].first = shape[0].first + shape_ptr->init_value[j].first;
-                            }
-                            return;
+                        contolled_piece->is_falling = false;
+                        return;
+                    }
+                    else {
+                        piece[0].first = prev_pos[0].first;
+                        for (int j = 1; j < piece.size(); j++) {
+                            piece[j].first = piece[0].first + contolled_piece->init_value[j].first;
                         }
+                        return;
                     }
                 }
             }
-        }   
+        }
     }
 }
 
