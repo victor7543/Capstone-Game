@@ -14,20 +14,29 @@ void Piece::CreatePiece(int grid_width)
 {
 	std::ifstream stream(pieces_file);
 	stream >> json_content;
-	auto object_it = json_content[0];
+	Uint32 index = RandomizePiece(json_content.size());
+	auto &object_it = json_content[index];
 	for (auto& line : object_it.items()) {
-		vector<std::string> keys{ "block1", "block2", "block3", "block4" };
-		for (auto& key : keys) {
-			if (key == line.key()) {
-				pair<short, short> block_pos = line.value();
+		std::string key = "block";
+		if (key == line.key()) {
+			for (auto &e : line.value()) {
+				pair<short, short> block_pos = e;
 				init_value.push_back(block_pos);
 				block_pos.first += grid_width / 2;
 				piece_pos.emplace_back(std::move(block_pos));
-				std::cout << line.key() << "\t" << line.value() << std::endl;
 			}
 		}
 	}
 }
+
+Uint32 Piece::RandomizePiece(int pieces_count)
+{
+	std::random_device rnd;
+	std::mt19937 gnrt(rnd());
+	std::uniform_int_distribution<uint32_t> distrib(0, pieces_count - 1);
+	return distrib(gnrt);
+}
+
 
 void Piece::Move() {
 	now = SDL_GetTicks();

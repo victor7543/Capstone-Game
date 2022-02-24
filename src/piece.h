@@ -1,6 +1,7 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
+#include <random>
 #include <vector>
 #include <fstream>
 #include <iostream>
@@ -33,6 +34,7 @@ class Piece {
  private:
   void CreatePiece(int grid_width);
   void PreventOffScreenMovement(vector<pair<float, float>> &prev_piece);
+  Uint32 RandomizePiece(int pieces_count);
   Direction prev_dir = Direction::kNeutral;
   int grid_width;
   int grid_height;
