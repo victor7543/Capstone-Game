@@ -7,66 +7,66 @@
 			[ 0, 1 ],
 			[ 1, 1 ]
 		],
-		"rotated": 0
+		"enable_rotation": 0
 	},
 	{
 		"name": "I",
 		"block": [
 			[ 0, 0 ],
-			[ 1, 0 ],
-			[ 2, 0 ],
-			[ 3, 0 ]
+			[ -2, 0 ],
+			[ -1, 0 ],
+			[ 1, 0 ]
 		],
-		"rotated": 0
+		"enable_rotation": 1
 	},
 	{
 		"name": "S",
 		"block": [
 			[ 0, 0 ],
-			[ 0, 1 ],
-			[ 1, 0 ],
-			[ 1, -1 ]
+			[ -1, 0 ],
+			[ -1, 1 ],
+			[ 0, -1 ]
 		],
-		"rotated": 0
+		"enable_rotation": 1
 	},
 	{
 		"name": "Z",
 		"block": [
 			[ 0, 0 ],
-			[ 0, 1 ],
-			[ 1, 1 ],
-			[ 1, 2 ]
+			[ -1, -1 ],
+			[ -1, 0 ],
+			[ 0, 1 ]
 		],
-		"rotated": 0
+		"enable_rotation": 1
 	},
 	{
 		"name": "L",
 		"block": [
 			[ 0, 0 ],
+			[ -1, 0 ],
 			[ 1, 0 ],
-			[ 2, 0 ],
-			[ 2, 1 ]
+			[ 1, 1 ]
 		],
-		"rotated": 0
+		"enable_rotation": 1
 	},
 	{
 		"name": "J",
 		"block": [
 			[ 0, 0 ],
+			[ -1, 0 ],
 			[ 1, 0 ],
-			[ 2, 0 ],
-			[ 2, -1 ]
+			[ 1, -1 ]
 		],
-		"rotated": 0
+		"enable_rotation": 1
 	},
 	{
 		"name": "T",
 		"block": [
 			[ 0, 0 ],
+			[ 0, -1 ],
 			[ 0, 1 ],
-			[ 0, 2 ],
-			[ 1, 1 ]
+			[ 1, 0 ]
 		],
-		"rotated": 0
+		"enable_rotation": 1
 	}
 ]

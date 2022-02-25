@@ -89,8 +89,8 @@ void Game::DetectCollision(vector<pair<float, float>> &prev_pos, vector<SDL_Poin
                     if (current_cell.x == prev_cell[i].x) {
                         piece[0] = prev_pos[0];
                         for (int j = 1; j < piece.size(); j++) {
-                            piece[j].first = piece[0].first + contolled_piece->init_value[j].first;
-                            piece[j].second = piece[0].second + contolled_piece->init_value[j].second;
+                            piece[j].first = piece[0].first + contolled_piece->initial_pos[j].first;
+                            piece[j].second = piece[0].second + contolled_piece->initial_pos[j].second;
                         }
                         contolled_piece->is_falling = false;
                         return;
@@ -98,7 +98,7 @@ void Game::DetectCollision(vector<pair<float, float>> &prev_pos, vector<SDL_Poin
                     else {
                         piece[0].first = prev_pos[0].first;
                         for (int j = 1; j < piece.size(); j++) {
-                            piece[j].first = piece[0].first + contolled_piece->init_value[j].first;
+                            piece[j].first = piece[0].first + contolled_piece->initial_pos[j].first;
                         }
                         return;
                     }

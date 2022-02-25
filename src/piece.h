@@ -29,11 +29,12 @@ class Piece {
   bool is_falling{true};
   pair<float, float> prev_block_pos;
   vector<pair<float, float>> piece_pos;
-  vector<pair<float, float>> init_value;
+  vector<pair<float, float>> initial_pos;
 
  private:
   void CreatePiece(int grid_width);
   void PreventOffScreenMovement(vector<pair<float, float>> &prev_piece);
+  void RotatePiece();
   Uint32 RandomizePiece(int pieces_count);
   Direction prev_dir = Direction::kNeutral;
   int grid_width;
