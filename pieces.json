@@ -1,72 +1,72 @@
 [
 	{
 		"name": "O",
-		"block": [
+		"cells": [
 			[ 0, 0 ],
 			[ 1, 0 ],
 			[ 0, 1 ],
 			[ 1, 1 ]
 		],
-		"enable_rotation": 0
+		"can_rotate": false
 	},
 	{
 		"name": "I",
-		"block": [
+		"cells": [
 			[ 0, 0 ],
 			[ -2, 0 ],
 			[ -1, 0 ],
 			[ 1, 0 ]
 		],
-		"enable_rotation": 1
+		"can_rotate": true
 	},
 	{
 		"name": "S",
-		"block": [
+		"cells": [
 			[ 0, 0 ],
 			[ -1, 0 ],
 			[ -1, 1 ],
 			[ 0, -1 ]
 		],
-		"enable_rotation": 1
+		"can_rotate": true
 	},
 	{
 		"name": "Z",
-		"block": [
+		"cells": [
 			[ 0, 0 ],
 			[ -1, -1 ],
 			[ -1, 0 ],
 			[ 0, 1 ]
 		],
-		"enable_rotation": 1
+		"can_rotate": true
 	},
 	{
 		"name": "L",
-		"block": [
+		"cells": [
 			[ 0, 0 ],
 			[ -1, 0 ],
 			[ 1, 0 ],
 			[ 1, 1 ]
 		],
-		"enable_rotation": 1
+		"can_rotate": true
 	},
 	{
 		"name": "J",
-		"block": [
+		"cells": [
 			[ 0, 0 ],
 			[ -1, 0 ],
 			[ 1, 0 ],
 			[ 1, -1 ]
 		],
-		"enable_rotation": 1
+		"can_rotate": true
 	},
 	{
 		"name": "T",
-		"block": [
+		"cells": [
 			[ 0, 0 ],
 			[ 0, -1 ],
 			[ 0, 1 ],
 			[ 1, 0 ]
 		],
-		"enable_rotation": 1
+		"can_rotate": true
 	}
 ]

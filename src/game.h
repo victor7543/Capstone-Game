@@ -20,20 +20,15 @@ class Game {
   int GetScore() const;
 
  private:
-  unique_ptr<Piece> contolled_piece;
+  unique_ptr<Piece> controlled_piece;
   vector<SDL_Point> filled_cells;
-
-  std::random_device dev;
-  std::mt19937 engine;
-  std::uniform_int_distribution<int> random_w;
-  std::uniform_int_distribution<int> random_h;
 
   int score{0};
   size_t _grid_width;
   size_t _grid_height;
 
   void Update();
-  void DetectCollision(vector<pair<float, float>> &prev_piece, vector<SDL_Point> &prev_cell);
+  void DetectCollision(vector<pair<float, float>> &prev_piece, vector<SDL_Point> &prev_cell, bool rotated);
 };
 
 #endif

@@ -29,6 +29,6 @@ void Controller::HandleInput(bool& running, Piece& piece) const {
         ChangeDirection(piece, Piece::Direction::kDown);
     }
     else {
-        ChangeDirection(piece, Piece::Direction::kNeutral);
+        ChangeDirection(piece, Piece::Direction::kNull);
     }
 }
