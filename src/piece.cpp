@@ -87,7 +87,7 @@ void Piece::Move() {
 	PreventOffScreenMovement(prev_pos, base_pos);
 }
 
-bool Piece::ShouldRotate(vector<pair<float, float>>& original_pos)
+bool Piece::TryRotate(vector<pair<float, float>>& original_pos)
 {
 	if (can_rotate && direction == Direction::kUp && prev_dir != Direction::kUp) {
 		prev_dir = Direction::kUp;

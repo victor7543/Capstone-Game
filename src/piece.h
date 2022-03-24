@@ -20,7 +20,7 @@ class Piece {
   enum class RotationDirection { Clockwise, Counter_Clockwise };
 
   void Move();
-  bool ShouldRotate(vector<pair<float, float>>& prev_piece);
+  bool TryRotate(vector<pair<float, float>>& prev_piece);
   void Rotate(vector<pair<float, float>> temp_initial_pos, RotationDirection rot_dir);
 
   Direction direction = Direction::kDown;

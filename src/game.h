@@ -22,13 +22,17 @@ class Game {
  private:
   unique_ptr<Piece> controlled_piece;
   vector<SDL_Point> filled_cells;
+  vector<SDL_Point> piece_cells;
+  vector<SDL_Point> prev_piece_cells;
+  vector<pair<float, float>> prev_pos;
 
-  int score{0};
+  int score = 0;
   size_t _grid_width;
   size_t _grid_height;
 
   void Update();
-  void DetectCollision(vector<pair<float, float>> &prev_piece, vector<SDL_Point> &prev_cell, bool rotated);
+  void VerifyCompletedRows();
+  void DetectCollision(bool rotated);
 };
 
 #endif
