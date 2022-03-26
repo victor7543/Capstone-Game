@@ -9,7 +9,9 @@ Game::Game(size_t grid_width, size_t grid_height)
 	: _grid_height(grid_height),
 	_grid_width(grid_width),
 	controlled_piece(make_unique<Piece>(grid_width, grid_height))
-{}
+{
+	SDL_Init(SDL_INIT_AUDIO);
+}
 
 void Game::Run(Controller const& controller, Renderer& renderer,
 	size_t target_frame_duration) {
@@ -20,7 +22,19 @@ void Game::Run(Controller const& controller, Renderer& renderer,
 	int frame_count = 0;
 	bool running = true;
 
+	SDL_AudioSpec wavSpec;
+	Uint32 wavLength;
+	Uint8* wavBuffer;
+
+	SDL_LoadWAV("Tetris_theme.wav", &wavSpec, &wavBuffer, &wavLength);
+	SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
+	int success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
+	SDL_PauseAudioDevice(deviceId, 0);
+
 	while (running) {
+		if (SDL_GetQueuedAudioSize(deviceId) == 0) {
+			success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
+		}
 		frame_start = SDL_GetTicks();
 
 		// Input, Update, Render - the main game loop.
@@ -49,6 +63,8 @@ void Game::Run(Controller const& controller, Renderer& renderer,
 			SDL_Delay(target_frame_duration - frame_duration);
 		}
 	}
+	SDL_CloseAudioDevice(deviceId);
+	SDL_FreeWAV(wavBuffer);
 }
 
 void Game::Update() {
