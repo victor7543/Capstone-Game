@@ -61,6 +61,7 @@ void Game::Update() {
 	}
 	if (!controlled_piece->is_falling) {
 		filled_cells.insert(std::end(filled_cells), std::begin(piece_cells), std::end(piece_cells));
+		VerifyCompletedRows();
 		controlled_piece = make_unique<Piece>(_grid_width, _grid_height);
 	}
 	else {
@@ -73,7 +74,6 @@ void Game::Update() {
 			DetectCollision(just_rotated);
 		}
 	}
-	VerifyCompletedRows();
 }
 
 void Game::DetectCollision(bool just_rotated)
@@ -129,6 +129,7 @@ void Game::VerifyCompletedRows()
 		}
 		if (deleted_cells >= 10) {
 			filled_cells = temp_filled_cells;
+			i++;
 		}
 		else { 
 			temp_filled_cells = filled_cells;
