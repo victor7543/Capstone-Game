@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include "SDL.h"
+#include "SDL_ttf.h"
 #include "piece.h"
 
 using std::size_t;
@@ -14,7 +15,7 @@ class Renderer {
            const size_t grid_width, const size_t grid_height);
   ~Renderer();
 
-  void Render(std::vector<SDL_Point> &piece_vec, Piece const &piece);
+  void Render(std::vector<SDL_Point> &piece_vec, Piece const &piece, int score);
  
   void UpdateWindowTitle(int score, int fps);
 
@@ -22,7 +23,7 @@ class Renderer {
   void RenderPiece(SDL_Point const& point, SDL_Rect& block);
   SDL_Window *sdl_window;
   SDL_Renderer *sdl_renderer;
-
+  void RenderText(int score);
   const size_t screen_width;
   const size_t screen_height;
   const size_t grid_width;

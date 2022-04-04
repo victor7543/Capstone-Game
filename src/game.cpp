@@ -31,6 +31,9 @@ void Game::Run(Controller const& controller, Renderer& renderer,
 	int success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
 	SDL_PauseAudioDevice(deviceId, 0);
 
+	if (TTF_Init() < 0) {
+		std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
+	}
 	while (running) {
 		if (SDL_GetQueuedAudioSize(deviceId) == 0) {
 			success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
@@ -40,7 +43,7 @@ void Game::Run(Controller const& controller, Renderer& renderer,
 		// Input, Update, Render - the main game loop.
 		controller.HandleInput(running, *controlled_piece);
 		Update();
-		renderer.Render(filled_cells, *controlled_piece);
+		renderer.Render(filled_cells, *controlled_piece, score);
 
 		frame_end = SDL_GetTicks();
 
@@ -65,6 +68,7 @@ void Game::Run(Controller const& controller, Renderer& renderer,
 	}
 	SDL_CloseAudioDevice(deviceId);
 	SDL_FreeWAV(wavBuffer);
+	TTF_Quit();
 }
 
 void Game::Update() {
@@ -76,11 +80,19 @@ void Game::Update() {
 		)));
 	}
 	if (!controlled_piece->is_falling) {
-		filled_cells.insert(std::end(filled_cells), std::begin(piece_cells), std::end(piece_cells));
-		VerifyCompletedRows();
-		controlled_piece = make_unique<Piece>(_grid_width, _grid_height);
+		for (auto cell : piece_cells) {
+			if (cell.y <= 0) {
+				is_game_over = true;
+				break;
+			}
+		}
+		if (!is_game_over) {
+			filled_cells.insert(std::end(filled_cells), std::begin(piece_cells), std::end(piece_cells));
+			VerifyCompletedRows();
+			controlled_piece = make_unique<Piece>(_grid_width, _grid_height);
+		}
 	}
-	else {
+	else if (!is_game_over) {
 		prev_pos = controlled_piece->piece_pos;
 		prev_piece_cells = piece_cells;
 		controlled_piece->Move();
@@ -145,6 +157,7 @@ void Game::VerifyCompletedRows()
 		}
 		if (deleted_cells >= 10) {
 			filled_cells = temp_filled_cells;
+			score += 100;
 			i++;
 		}
 		else { 
@@ -153,5 +166,3 @@ void Game::VerifyCompletedRows()
 		deleted_cells = 0;
 	}
 }
-
-int Game::GetScore() const { return score; }

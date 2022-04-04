@@ -38,7 +38,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(std::vector<SDL_Point>& cells_vec, Piece const &piece) {
+void Renderer::Render(std::vector<SDL_Point>& cells_vec, Piece const &piece, int score) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -53,8 +53,7 @@ void Renderer::Render(std::vector<SDL_Point>& cells_vec, Piece const &piece) {
   for (auto& cell : piece.piece_pos) {
       RenderPiece(SDL_Point(static_cast<int>(cell.first), static_cast<int>(cell.second)), block);
   }
-
-  // Update Screen
+  RenderText(score);
   SDL_RenderPresent(sdl_renderer);
 }
 
@@ -65,6 +64,24 @@ void Renderer::RenderPiece(SDL_Point const& point, SDL_Rect& block)
     block.x = static_cast<int>(point.x) * block.w;
     block.y = static_cast<int>(point.y) * block.h;
     SDL_RenderFillRect(sdl_renderer, &block);
+}
+
+void Renderer::RenderText(int score)
+{
+    std::string score_text = "Score: " + std::to_string(score);
+    TTF_Font* Arial = TTF_OpenFont("Arial.ttf", 24);
+    SDL_Color White = { 255, 255, 255 };
+    SDL_Surface* surfaceMessage =
+        TTF_RenderText_Solid(Arial, score_text.c_str(), White);
+    SDL_Texture* Message = SDL_CreateTextureFromSurface(sdl_renderer, surfaceMessage);
+    SDL_Rect Message_rect;
+    Message_rect.x = 0;
+    Message_rect.y = 0;
+    Message_rect.w = 100;
+    Message_rect.h = 30;
+    SDL_RenderCopy(sdl_renderer, Message, NULL, &Message_rect);
+    SDL_DestroyTexture(Message);
+    SDL_FreeSurface(surfaceMessage);
 }
 
 void Renderer::UpdateWindowTitle(int score, int fps) {
