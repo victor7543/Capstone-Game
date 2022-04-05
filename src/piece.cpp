@@ -5,7 +5,8 @@
 Piece::Piece(int grid_width, int grid_height)
 	: grid_width(grid_width),
 	grid_height(grid_height),
-	movement_key_timer(SDL_GetTicks())
+	horiz_mov_key_timer(SDL_GetTicks()),
+	vert_mov_key_timer(SDL_GetTicks())
 {
 	CreatePiece(grid_width);
 }
@@ -40,18 +41,14 @@ Uint32 Piece::RandomizePiece(int pieces_count)
 	return distrib(gnrt);
 }
 
-
-void Piece::Move() {
+void Piece::MoveVertical() {
 	auto prev_pos = piece_pos;
 	auto now = SDL_GetTicks();
-	auto time_diff = (now - movement_key_timer);
-	if (prev_dir != direction || time_diff >= mov_time_threshold) {
+	auto time_diff = (now - vert_mov_key_timer);
+	if (prev_dir != direction || time_diff >= vert_mov_time_threshold) {
 		float temp_speed_x = speed_x;
-		if (time_diff < mov_time_threshold) {
-			movement_key_timer = SDL_GetTicks();
-		}
-		else {
-			temp_speed_x = speed_x / 5.0;
+		if (time_diff < vert_mov_time_threshold) {
+			vert_mov_key_timer = SDL_GetTicks();
 		}
 		switch (direction) {
 		case Direction::kDown:
@@ -59,7 +56,33 @@ void Piece::Move() {
 			for (int i = 1; i < piece_pos.size(); i++) {
 				piece_pos[i].second = piece_pos[0].second + base_pos[i].second;
 			}
+			prev_dir = direction;
+			direction = Direction::kNull;
 			break;
+		default:
+			vert_mov_key_timer = SDL_GetTicks();
+		}
+	}
+	piece_pos[0].second += speed_y;
+	for (int i = 1; i < piece_pos.size(); i++) {
+		piece_pos[i].second = piece_pos[0].second + base_pos[i].second;
+	}
+	PreventOffScreenMovement(prev_pos, base_pos);
+}
+
+void Piece::MoveHorizontal() {
+	auto prev_pos = piece_pos;
+	auto now = SDL_GetTicks();
+	auto time_diff = (now - horiz_mov_key_timer);
+	if (prev_dir != direction || time_diff >= horiz_mov_time_threshold) {
+		float temp_speed_x = speed_x;
+		if (time_diff < horiz_mov_time_threshold) {
+			horiz_mov_key_timer = SDL_GetTicks();
+		}
+		else {
+			temp_speed_x = speed_x / 2.5;
+		}
+		switch (direction) {
 		case Direction::kLeft:
 			piece_pos[0].first -= temp_speed_x;
 			for (int i = 1; i < piece_pos.size(); i++) {
@@ -73,16 +96,12 @@ void Piece::Move() {
 			}
 			break;
 		default:
-			movement_key_timer = SDL_GetTicks();
+			horiz_mov_key_timer = SDL_GetTicks();
 		}
 	}
-	if (direction != Direction::kUp) {
+	if (direction != Direction::kUp && direction != Direction::kDown) {
 		prev_dir = direction;
 		direction = Direction::kNull;
-	}
-	piece_pos[0].second += speed_y;
-	for (int i = 1; i < piece_pos.size(); i++) {
-		piece_pos[i].second = piece_pos[0].second + base_pos[i].second;
 	}
 	PreventOffScreenMovement(prev_pos, base_pos);
 }

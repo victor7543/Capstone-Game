@@ -1,5 +1,6 @@
-#include "game.h"
 #include <iostream>
+#include <math.h>
+#include "game.h"
 #include "SDL.h"
 
 using std::make_unique;
@@ -95,7 +96,9 @@ void Game::Update() {
 	else if (!is_game_over) {
 		prev_pos = controlled_piece->piece_pos;
 		prev_piece_cells = piece_cells;
-		controlled_piece->Move();
+		controlled_piece->MoveVertical();
+		DetectCollision(false);
+		controlled_piece->MoveHorizontal();
 		DetectCollision(false);
 		bool just_rotated = controlled_piece->TryRotate(controlled_piece->piece_pos);
 		if (just_rotated) {
@@ -144,6 +147,7 @@ void Game::VerifyCompletedRows()
 {
 	vector<SDL_Point> temp_filled_cells = filled_cells;
 	int deleted_cells = 0;
+	int sequence = 0;
 	for (int i = 20; i >= 0; i--) {
 		for (int j = 1; j <= temp_filled_cells.size(); j++) {
 			if (temp_filled_cells[j-1].y == i) {
@@ -157,7 +161,8 @@ void Game::VerifyCompletedRows()
 		}
 		if (deleted_cells >= 10) {
 			filled_cells = temp_filled_cells;
-			score += 100;
+			score += 100 * pow(2, sequence);
+			sequence += 1;
 			i++;
 		}
 		else { 
@@ -165,4 +170,5 @@ void Game::VerifyCompletedRows()
 		}
 		deleted_cells = 0;
 	}
+	sequence = 0;
 }

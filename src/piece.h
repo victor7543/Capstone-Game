@@ -19,7 +19,8 @@ class Piece {
   enum class Direction { kUp, kDown, kLeft, kRight, kNull };
   enum class RotationDirection { Clockwise, Counter_Clockwise };
 
-  void Move();
+  void MoveHorizontal();
+  void MoveVertical();
   bool TryRotate(vector<pair<float, float>>& prev_piece);
   void Rotate(vector<pair<float, float>> temp_initial_pos, RotationDirection rot_dir);
 
@@ -41,8 +42,10 @@ class Piece {
   int grid_width;
   int grid_height;
   const std::string pieces_file = "pieces.json";
-  Uint32 movement_key_timer = 0;
-  Uint32 mov_time_threshold = 200;
+  Uint32 horiz_mov_key_timer = 0;
+  Uint32 vert_mov_key_timer = 0;
+  Uint32 vert_mov_time_threshold = 200;
+  Uint32 horiz_mov_time_threshold = 200;
   bool can_rotate = true;
   json json_content;
 };
