@@ -53,7 +53,7 @@ void Renderer::Render(std::vector<SDL_Point>& cells_vec, Piece const &piece, int
   for (auto& cell : piece.piece_pos) {
       RenderPiece(SDL_Point(static_cast<int>(cell.first), static_cast<int>(cell.second)), block);
   }
-  RenderText(score);
+  RenderScore(score);
   SDL_RenderPresent(sdl_renderer);
 }
 
@@ -66,7 +66,7 @@ void Renderer::RenderPiece(SDL_Point const& point, SDL_Rect& block)
     SDL_RenderFillRect(sdl_renderer, &block);
 }
 
-void Renderer::RenderText(int score)
+void Renderer::RenderScore(int score)
 {
     std::string score_text = "Score: " + std::to_string(score);
     TTF_Font* Arial = TTF_OpenFont("Arial.ttf", 24);

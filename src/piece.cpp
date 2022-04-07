@@ -138,12 +138,12 @@ void Piece::Rotate(vector<pair<float, float>> p_base_pos, RotationDirection rot_
 	}
 }
 
-bool Piece::PreventOffScreenMovement(vector<pair<float, float>>& original_pos, vector<pair<float, float>>& base_pos)
+bool Piece::PreventOffScreenMovement(vector<pair<float, float>>& prev_pos, vector<pair<float, float>>& base_pos)
 {
 	for (int i = 0; i < piece_pos.size(); i++) {
 		if (piece_pos[i].second > grid_height) {
-			piece_pos[0].first = original_pos[0].first;
-			piece_pos[0].second = original_pos[0].second;
+			piece_pos[0].first = prev_pos[0].first;
+			piece_pos[0].second = prev_pos[0].second;
 			for (int i = 1; i < piece_pos.size(); i++) {
 				piece_pos[i].first = piece_pos[0].first + base_pos[i].first;
 				piece_pos[i].second = piece_pos[0].second + base_pos[i].second;
@@ -151,8 +151,8 @@ bool Piece::PreventOffScreenMovement(vector<pair<float, float>>& original_pos, v
 			this->is_falling = false;
 			return true;
 		}
-		else if (piece_pos[i].first > grid_width || piece_pos[i].first < 0.0) {
-			piece_pos[0].first = original_pos[0].first;
+		else if (piece_pos[i].first >= grid_width || piece_pos[i].first < 0.0) {
+			piece_pos[0].first = prev_pos[0].first;
 			for (int i = 1; i < piece_pos.size(); i++) {
 				piece_pos[i].first = piece_pos[0].first + base_pos[i].first;
 			}
