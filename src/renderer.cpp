@@ -38,7 +38,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(std::vector<SDL_Point>& cells_vec, Piece const &piece, int score) {
+void Renderer::Render(std::vector<SDL_Point>& cells_vec, Piece const &piece, int score, bool is_game_over) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -54,6 +54,9 @@ void Renderer::Render(std::vector<SDL_Point>& cells_vec, Piece const &piece, int
       RenderPiece(SDL_Point(static_cast<int>(cell.first), static_cast<int>(cell.second)), block);
   }
   RenderScore(score);
+  if (is_game_over) {
+      RenderGameOver(score);
+  }
   SDL_RenderPresent(sdl_renderer);
 }
 
@@ -79,6 +82,24 @@ void Renderer::RenderScore(int score)
     Message_rect.y = 0;
     Message_rect.w = 100;
     Message_rect.h = 30;
+    SDL_RenderCopy(sdl_renderer, Message, NULL, &Message_rect);
+    SDL_DestroyTexture(Message);
+    SDL_FreeSurface(surfaceMessage);
+}
+
+void Renderer::RenderGameOver(int score)
+{
+    std::string game_over_text = "Press any button to play again";
+    TTF_Font* Arial = TTF_OpenFont("Arial.ttf", 36);
+    SDL_Color Orange = { 255,99,71 };
+    SDL_Surface* surfaceMessage =
+        TTF_RenderText_Solid(Arial, game_over_text.c_str(), Orange);
+    SDL_Texture* Message = SDL_CreateTextureFromSurface(sdl_renderer, surfaceMessage);
+    SDL_Rect Message_rect;
+    Message_rect.x = screen_width/12;
+    Message_rect.y = screen_height/3;
+    Message_rect.w = 400;
+    Message_rect.h = 60;
     SDL_RenderCopy(sdl_renderer, Message, NULL, &Message_rect);
     SDL_DestroyTexture(Message);
     SDL_FreeSurface(surfaceMessage);

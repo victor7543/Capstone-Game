@@ -44,7 +44,7 @@ void Game::Run(Controller const& controller, Renderer& renderer,
 		// Input, Update, Render - the main game loop.
 		controller.HandleInput(running, *controlled_piece);
 		Update();
-		renderer.Render(filled_cells, *controlled_piece, score);
+		renderer.Render(filled_cells, *controlled_piece, score, is_game_over);
 
 		frame_end = SDL_GetTicks();
 
