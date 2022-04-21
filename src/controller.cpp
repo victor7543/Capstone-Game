@@ -8,11 +8,15 @@ void Controller::ChangeDirection(Piece& piece, Piece::Direction input) const {
     return;
 }
 
-void Controller::HandleInput(bool& running, Piece& piece) const {
+bool Controller::HandleInput(bool& running, Piece& piece, bool &is_game_over) const {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {
             running = false;
+            return false;
+        }
+        else if (is_game_over && e.type == SDL_KEYDOWN) {
+            return true;
         }
     }
     const Uint8* keystates = SDL_GetKeyboardState(NULL);
@@ -31,4 +35,5 @@ void Controller::HandleInput(bool& running, Piece& piece) const {
     else {
         ChangeDirection(piece, Piece::Direction::kNull);
     }
+    return false;
 }

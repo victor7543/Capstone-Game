@@ -4,7 +4,7 @@
 
 class Controller {
  public:
-  void HandleInput(bool &running, Piece &piece) const;
+  bool HandleInput(bool &running, Piece &piece, bool &is_game_over) const;
 
  private:
   void ChangeDirection(Piece &piece, Piece::Direction input) const;

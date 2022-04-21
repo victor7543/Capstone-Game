@@ -89,7 +89,7 @@ void Renderer::RenderScore(int score)
 
 void Renderer::RenderGameOver(int score)
 {
-    std::string game_over_text = "Press any button to play again";
+    std::string game_over_text = "Press any key to play again";
     TTF_Font* Arial = TTF_OpenFont("Arial.ttf", 36);
     SDL_Color Orange = { 255,99,71 };
     SDL_Surface* surfaceMessage =

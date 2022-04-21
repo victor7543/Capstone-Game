@@ -42,7 +42,9 @@ void Game::Run(Controller const& controller, Renderer& renderer,
 		frame_start = SDL_GetTicks();
 
 		// Input, Update, Render - the main game loop.
-		controller.HandleInput(running, *controlled_piece);
+		if (controller.HandleInput(running, *controlled_piece, is_game_over)) {
+			ResetGame();
+		}
 		Update();
 		renderer.Render(filled_cells, *controlled_piece, score, is_game_over);
 
@@ -80,7 +82,7 @@ void Game::Update() {
 			static_cast<int>(pos.second)
 		)));
 	}
-	if (!controlled_piece->is_falling) {
+	if (!controlled_piece->is_falling && !is_game_over) {
 		for (auto cell : piece_cells) {
 			if (cell.y <= 0) {
 				is_game_over = true;
@@ -171,4 +173,12 @@ void Game::VerifyCompletedRows()
 		deleted_cells = 0;
 	}
 	sequence = 0;
+}
+
+void Game::ResetGame()
+{
+	filled_cells = vector<SDL_Point>();
+	score = 0;
+	is_game_over = false;
+	controlled_piece = make_unique<Piece>(_grid_width, _grid_height);
 }

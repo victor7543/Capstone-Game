@@ -33,6 +33,7 @@ class Game {
   void Update();
   void VerifyCompletedRows();
   void DetectCollision(bool rotated);
+  void ResetGame();
 };
 
 #endif
