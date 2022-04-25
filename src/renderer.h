@@ -19,7 +19,8 @@ class Renderer {
   void UpdateWindowTitle(int score, int fps);
 
  private:
-  void RenderPiece(SDL_Point const& point, SDL_Rect& block);
+  void RenderPiece(SDL_Point const& point, SDL_Rect& block, Piece const& piece);
+  void RenderFilledCells(SDL_Point const& point, SDL_Rect& block);
   SDL_Window *sdl_window;
   SDL_Renderer *sdl_renderer;
   void RenderScore(int score);

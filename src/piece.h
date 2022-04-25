@@ -26,6 +26,7 @@ class Piece {
 
   Direction direction = Direction::kDown;
 
+  std::string color;
   const float speed_x = 1.0f;
   const float speed_y = 0.0165;
   bool is_falling = true;
@@ -47,7 +48,7 @@ class Piece {
   Uint32 vert_mov_time_threshold = 200;
   Uint32 horiz_mov_time_threshold = 200;
   bool can_rotate = true;
-  json json_content;
+  json json;
 };
 
 #endif

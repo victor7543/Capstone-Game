@@ -7,7 +7,8 @@
 			[ 0, 1 ],
 			[ 1, 1 ]
 		],
-		"can_rotate": false
+		"can_rotate": false,
+		"color": "#ffff00"
 	},
 	{
 		"name": "I",
@@ -17,7 +18,8 @@
 			[ -1, 0 ],
 			[ 1, 0 ]
 		],
-		"can_rotate": true
+		"can_rotate": true,
+		"color": "#00ffff"
 	},
 	{
 		"name": "S",
@@ -27,7 +29,8 @@
 			[ -1, 1 ],
 			[ 0, -1 ]
 		],
-		"can_rotate": true
+		"can_rotate": true,
+		"color": "#00ff00"
 	},
 	{
 		"name": "Z",
@@ -37,7 +40,8 @@
 			[ -1, 0 ],
 			[ 0, 1 ]
 		],
-		"can_rotate": true
+		"can_rotate": true,
+		"color": "#ff0000"
 	},
 	{
 		"name": "L",
@@ -47,7 +51,8 @@
 			[ 1, 0 ],
 			[ 1, 1 ]
 		],
-		"can_rotate": true
+		"can_rotate": true,
+		"color": "#ff7f00"
 	},
 	{
 		"name": "J",
@@ -57,7 +62,8 @@
 			[ 1, 0 ],
 			[ 1, -1 ]
 		],
-		"can_rotate": true
+		"can_rotate": true,
+		"color": "#0000ff"
 	},
 	{
 		"name": "T",
@@ -67,6 +73,7 @@
 			[ 0, 1 ],
 			[ 1, 0 ]
 		],
-		"can_rotate": true
+		"can_rotate": true,
+		"color": "#800080" 
 	}
 ]

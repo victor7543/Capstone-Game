@@ -14,13 +14,13 @@ Piece::Piece(int grid_width, int grid_height)
 void Piece::CreatePiece(int grid_width)
 {
 	std::ifstream stream(pieces_file);
-	stream >> json_content;
-	Uint32 index = RandomizePiece(json_content.size());
-	auto& object_it = json_content[index];
-	for (auto& line : object_it.items()) {
+	stream >> json;
+	Uint32 index = RandomizePiece(json.size());
+	auto& piece_data = json[index];
+	for (auto& line : piece_data.items()) {
 		if (line.key() == "cells") {
-			for (auto& e : line.value()) {
-				pair<short, short> block_pos = e;
+			for (auto& json_block_pos : line.value()) {
+				pair<short, short> block_pos = json_block_pos;
 				base_pos.push_back(block_pos);
 				block_pos.first += grid_width / 2;
 				piece_pos.emplace_back(std::move(block_pos));
@@ -29,6 +29,9 @@ void Piece::CreatePiece(int grid_width)
 		}
 		else if (line.key() == "can_rotate") {
 			can_rotate = line.value();
+		}
+		else if (line.key() == "color") {
+			color = line.value();
 		}
 	}
 }

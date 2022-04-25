@@ -48,10 +48,10 @@ void Renderer::Render(std::vector<SDL_Point>& cells_vec, Piece const &piece, int
   SDL_RenderClear(sdl_renderer);
 
   for (int i = 0; i < cells_vec.size(); i++) {
-      RenderPiece(cells_vec[i], block);
+      RenderFilledCells(cells_vec[i], block);
   } 
   for (auto& cell : piece.piece_pos) {
-      RenderPiece(SDL_Point(static_cast<int>(cell.first), static_cast<int>(cell.second)), block);
+      RenderPiece(SDL_Point(static_cast<int>(cell.first), static_cast<int>(cell.second)), block, piece);
   }
   RenderScore(score);
   if (is_game_over) {
@@ -60,13 +60,37 @@ void Renderer::Render(std::vector<SDL_Point>& cells_vec, Piece const &piece, int
   SDL_RenderPresent(sdl_renderer);
 }
 
-void Renderer::RenderPiece(SDL_Point const& point, SDL_Rect& block)
+void Renderer::RenderPiece(SDL_Point const& point, SDL_Rect& block, Piece const& piece)
 {
     // Render piece
-    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x00, 0x00, 0x00);
     block.x = static_cast<int>(point.x) * block.w;
     block.y = static_cast<int>(point.y) * block.h;
     SDL_RenderFillRect(sdl_renderer, &block);
+    // scale down the rect and render again to create an outline
+    SDL_Rect interior_color = block;
+    interior_color.h *= 0.95;
+    interior_color.w *= 0.95;
+    std::string red = piece.color.substr(1, 2);
+    std::string green = piece.color.substr(3, 2);
+    std::string blue = piece.color.substr(5, 2);
+    SDL_SetRenderDrawColor(sdl_renderer, std::stoul(red, nullptr, 16), std::stoul(green, nullptr, 16), std::stoul(blue, nullptr, 16), 0xFF);
+    SDL_RenderFillRect(sdl_renderer, &interior_color);
+}
+
+void Renderer::RenderFilledCells(SDL_Point const& point, SDL_Rect& block)
+{
+    SDL_SetRenderDrawColor(sdl_renderer, 0x00, 0x00, 0x00, 0x00);
+    block.x = static_cast<int>(point.x) * block.w;
+    block.y = static_cast<int>(point.y) * block.h;
+    SDL_RenderFillRect(sdl_renderer, &block);
+
+    // scale down the rect and render again to create an outline
+    SDL_Rect interior_color = block;
+    interior_color.h *= 0.95;
+    interior_color.w *= 0.95;
+    SDL_SetRenderDrawColor(sdl_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_RenderFillRect(sdl_renderer, &interior_color);
 }
 
 void Renderer::RenderScore(int score)
