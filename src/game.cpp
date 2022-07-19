@@ -14,7 +14,7 @@ Game::Game(size_t grid_width, size_t grid_height)
 	SDL_Init(SDL_INIT_AUDIO);
 }
 
-void Game::Run(Controller const& controller, Renderer& renderer,
+void Game::Run(Controller const&controller, Renderer& renderer,
 	size_t target_frame_duration) {
 	Uint32 title_timestamp = SDL_GetTicks();
 	Uint32 frame_start;
@@ -98,18 +98,18 @@ void Game::Update() {
 	else if (!is_game_over) {
 		prev_pos = controlled_piece->piece_pos;
 		prev_piece_cells = piece_cells;
-		controlled_piece->MoveVertical();
+		controlled_piece->Accelerate();
 		DetectCollision(false);
 		controlled_piece->MoveHorizontal();
 		DetectCollision(false);
-		bool just_rotated = controlled_piece->TryRotate(controlled_piece->piece_pos);
-		if (just_rotated) {
-			DetectCollision(just_rotated);
+		controlled_piece->TryRotate(controlled_piece->piece_pos);
+		if (controlled_piece->rotated) {
+			DetectCollision(controlled_piece->rotated);
 		}
 	}
 }
 
-void Game::DetectCollision(bool just_rotated)
+void Game::DetectCollision(bool rotated)
 {
 	auto& piece = controlled_piece->piece_pos;
 	for (int i = 0; i < piece.size(); i++) {
@@ -121,7 +121,7 @@ void Game::DetectCollision(bool just_rotated)
 		for (auto const& filled_cell : filled_cells) {
 			if (current_cell.x != prev_piece_cells[i].x || current_cell.y != prev_piece_cells[i].y) { // The piece has changed cells since last update
 				if (current_cell.x == filled_cell.x && current_cell.y == filled_cell.y) { // The piece is intersecting with a filled cell.
-					if (just_rotated) {
+					if (rotated) {
 						controlled_piece->Rotate(controlled_piece->base_pos, Piece::RotationDirection::Counter_Clockwise); // The piece is just going back to it's previous rotation, which is a valid position.
 						return;
 					}

@@ -3,11 +3,6 @@
 #include "SDL.h"
 #include "piece.h"
 
-void Controller::ChangeDirection(Piece& piece, Piece::Direction input) const {
-    piece.direction = input;
-    return;
-}
-
 bool Controller::HandleInput(bool& running, Piece& piece, bool &is_game_over) const {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
@@ -21,19 +16,53 @@ bool Controller::HandleInput(bool& running, Piece& piece, bool &is_game_over) co
     }
     const Uint8* keystates = SDL_GetKeyboardState(NULL);
     if (keystates[SDL_SCANCODE_UP]) {
-        ChangeDirection(piece, Piece::Direction::kUp);
-    }
-    else if (keystates[SDL_SCANCODE_LEFT]) {
-        ChangeDirection(piece, Piece::Direction::kLeft);
-    }
-    else if (keystates[SDL_SCANCODE_RIGHT]) {
-        ChangeDirection(piece, Piece::Direction::kRight);
-    }
-    else if (keystates[SDL_SCANCODE_DOWN]) {
-        ChangeDirection(piece, Piece::Direction::kDown);
+        if (rotate_key_already_pressed) {
+            piece.rotate_key_held = true;
+        }
+        rotate_key_already_pressed = true;
     }
     else {
-        ChangeDirection(piece, Piece::Direction::kNull);
+        piece.rotated = false;
+        piece.rotate_key_held = false;
+        rotate_key_already_pressed = false;
+    }
+    if (keystates[SDL_SCANCODE_LEFT] && keystates[SDL_SCANCODE_RIGHT]) {
+        piece.horiz_direction = Piece::Direction::kNull;
+        if (horiz_key_already_pressed) {
+            piece.horiz_key_held = true;
+        }
+        horiz_key_already_pressed = true;
+    }
+    else if (keystates[SDL_SCANCODE_LEFT]) {
+        piece.horiz_direction = Piece::Direction::kLeft;
+        if (horiz_key_already_pressed) {
+            piece.horiz_key_held = true;
+        }
+        horiz_key_already_pressed = true;
+    }
+    else if (keystates[SDL_SCANCODE_RIGHT]) {
+        piece.horiz_direction = Piece::Direction::kRight;
+        if (horiz_key_already_pressed) {
+            piece.horiz_key_held = true;
+        }
+        horiz_key_already_pressed = true;
+    }
+    else {
+        piece.horiz_direction = Piece::Direction::kNull;
+        horiz_key_already_pressed = false;
+        piece.horiz_key_held = false;
+    }
+    if (keystates[SDL_SCANCODE_DOWN]) {
+        piece.vert_direction = Piece::Direction::kDown;
+        if (acceleration_key_already_pressed) {
+            piece.acceleration_key_held = true;
+        }
+        acceleration_key_already_pressed = true;
+    }
+    else {
+        piece.vert_direction = Piece::Direction::kNull;
+        acceleration_key_already_pressed = false;
+        piece.acceleration_key_held = false;
     }
     return false;
 }

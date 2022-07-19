@@ -19,7 +19,7 @@
 			[ 1, 0 ]
 		],
 		"can_rotate": true,
-		"color": "#00ffff"
+		"color": "#add8e6"
 	},
 	{
 		"name": "S",
@@ -30,7 +30,7 @@
 			[ 0, -1 ]
 		],
 		"can_rotate": true,
-		"color": "#00ff00"
+		"color": "#008000"
 	},
 	{
 		"name": "Z",

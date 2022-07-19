@@ -20,11 +20,16 @@ class Piece {
   enum class RotationDirection { Clockwise, Counter_Clockwise };
 
   void MoveHorizontal();
-  void MoveVertical();
-  bool TryRotate(vector<pair<float, float>>& prev_piece);
+  void Accelerate();
+  void TryRotate(vector<pair<float, float>>& prev_piece);
   void Rotate(vector<pair<float, float>> temp_initial_pos, RotationDirection rot_dir);
 
-  Direction direction = Direction::kDown;
+  bool rotated = false;
+  bool rotate_key_held = false;
+  bool acceleration_key_held = false;
+  bool horiz_key_held = false;
+  Direction horiz_direction = Direction::kNull;
+  Direction vert_direction = Direction::kNull;
 
   std::string color;
   const float speed_x = 1.0f;

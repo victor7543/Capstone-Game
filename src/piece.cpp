@@ -44,23 +44,22 @@ Uint32 Piece::RandomizePiece(int pieces_count)
 	return distrib(gnrt);
 }
 
-void Piece::MoveVertical() {
+void Piece::Accelerate() {
 	auto prev_pos = piece_pos;
 	auto now = SDL_GetTicks();
 	auto time_diff = (now - vert_mov_key_timer);
-	if (prev_dir != direction || time_diff >= vert_mov_time_threshold) {
+	if (acceleration_key_held == false || time_diff >= vert_mov_time_threshold) {
 		float temp_speed_x = speed_x;
 		if (time_diff < vert_mov_time_threshold) {
 			vert_mov_key_timer = SDL_GetTicks();
 		}
-		switch (direction) {
+		switch (vert_direction) {
 		case Direction::kDown:
 			piece_pos[0].second += speed_y * 10.0f;
 			for (int i = 1; i < piece_pos.size(); i++) {
 				piece_pos[i].second = piece_pos[0].second + base_pos[i].second;
 			}
-			prev_dir = direction;
-			direction = Direction::kNull;
+			vert_direction = Direction::kNull;
 			break;
 		default:
 			vert_mov_key_timer = SDL_GetTicks();
@@ -77,7 +76,7 @@ void Piece::MoveHorizontal() {
 	auto prev_pos = piece_pos;
 	auto now = SDL_GetTicks();
 	auto time_diff = (now - horiz_mov_key_timer);
-	if (prev_dir != direction || time_diff >= horiz_mov_time_threshold) {
+	if (horiz_key_held == false || time_diff >= horiz_mov_time_threshold) {
 		float temp_speed_x = speed_x;
 		if (time_diff < horiz_mov_time_threshold) {
 			horiz_mov_key_timer = SDL_GetTicks();
@@ -85,7 +84,7 @@ void Piece::MoveHorizontal() {
 		else {
 			temp_speed_x = speed_x / 2.5;
 		}
-		switch (direction) {
+		switch (horiz_direction) {
 		case Direction::kLeft:
 			piece_pos[0].first -= temp_speed_x;
 			for (int i = 1; i < piece_pos.size(); i++) {
@@ -102,27 +101,23 @@ void Piece::MoveHorizontal() {
 			horiz_mov_key_timer = SDL_GetTicks();
 		}
 	}
-	if (direction != Direction::kUp && direction != Direction::kDown) {
-		prev_dir = direction;
-		direction = Direction::kNull;
-	}
+	horiz_direction = Direction::kNull;
 	PreventOffScreenMovement(prev_pos, base_pos);
 }
 
-bool Piece::TryRotate(vector<pair<float, float>>& original_pos)
+void Piece::TryRotate(vector<pair<float, float>>& original_pos)
 {
-	if (can_rotate && direction == Direction::kUp && prev_dir != Direction::kUp) {
-		prev_dir = Direction::kUp;
+	if (can_rotate && rotate_key_held && rotated == false) {
 		vector<pair<float, float>> temp_base_pos = base_pos;
 		Rotate(temp_base_pos, RotationDirection::Clockwise);
+		rotate_key_held = false;
 		if (PreventOffScreenMovement(original_pos, temp_base_pos)) {
 			base_pos = temp_base_pos;
 		}
 		else {
-			return true;
+			rotated = true;
 		}
 	}
-	return false;
 }
 
 void Piece::Rotate(vector<pair<float, float>> p_base_pos, RotationDirection rot_dir)
