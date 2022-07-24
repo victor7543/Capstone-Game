@@ -1,16 +1,17 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <random>
-#include <memory>
+#include <vector>
 #include "SDL.h"
-#include "controller.h"
-#include "renderer.h"
-#include "piece.h"
 
 using std::vector;
 using std::unique_ptr;
 using std::pair;
+
+class Controller;
+class Renderer;
+class Piece;
+class SDL_Point;
 
 class Game {
  public:
@@ -30,9 +31,15 @@ class Game {
   size_t _grid_width;
   size_t _grid_height;
 
+  SDL_AudioSpec wavSpec;
+  Uint32 wavLength;
+  Uint8* wavBuffer;
+  SDL_AudioDeviceID deviceId;
+
+  bool InitAudio();
   void Update();
   void VerifyCompletedRows();
-  void DetectCollision(bool rotated);
+  void DetectCollisions(bool rotated);
   void ResetGame();
 };
 

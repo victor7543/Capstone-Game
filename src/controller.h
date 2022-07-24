@@ -1,6 +1,7 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
-#include "piece.h"
+
+class Piece;
 
 class Controller {
  public:

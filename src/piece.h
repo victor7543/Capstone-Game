@@ -1,10 +1,7 @@
-#ifndef SHAPE_H
-#define SHAPE_H
+#ifndef PIECE_H
+#define PIECE_H
 
-#include <random>
 #include <vector>
-#include <fstream>
-#include <iostream>
 #include "SDL.h"
 #include "json.hpp"
 

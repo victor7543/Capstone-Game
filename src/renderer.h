@@ -2,12 +2,14 @@
 #define RENDERER_H
 
 #include <vector>
-#include <memory>
 #include "SDL.h"
-#include "SDL_ttf.h"
 #include "piece.h"
 
 using std::size_t;
+
+class SDL_Rect;
+class SDL_Window;
+class SDL_Renderer;
 
 class Renderer {
  public:

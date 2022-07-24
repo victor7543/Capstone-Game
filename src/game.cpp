@@ -1,7 +1,9 @@
 #include <iostream>
-#include <math.h>
 #include "game.h"
-#include "SDL.h"
+#include "controller.h"
+#include "renderer.h"
+#include "piece.h"
+#include <SDL_ttf.h>
 
 using std::make_unique;
 using std::size_t;
@@ -23,21 +25,14 @@ void Game::Run(Controller const&controller, Renderer& renderer,
 	int frame_count = 0;
 	bool running = true;
 
-	SDL_AudioSpec wavSpec;
-	Uint32 wavLength;
-	Uint8* wavBuffer;
-
-	SDL_LoadWAV("Tetris_theme.wav", &wavSpec, &wavBuffer, &wavLength);
-	SDL_AudioDeviceID deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
-	int success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
-	SDL_PauseAudioDevice(deviceId, 0);
 
 	if (TTF_Init() < 0) {
 		std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
 	}
+	int audio_queue_success = InitAudio();
 	while (running) {
-		if (SDL_GetQueuedAudioSize(deviceId) == 0) {
-			success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
+		if (SDL_GetQueuedAudioSize(deviceId) == 0 && audio_queue_success == 0) {
+			audio_queue_success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
 		}
 		frame_start = SDL_GetTicks();
 
@@ -74,6 +69,17 @@ void Game::Run(Controller const&controller, Renderer& renderer,
 	TTF_Quit();
 }
 
+bool Game::InitAudio()
+{
+	SDL_LoadWAV("Tetris_theme.wav", &wavSpec, &wavBuffer, &wavLength);
+	deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
+	int success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
+	if (success == 0) {
+		SDL_PauseAudioDevice(deviceId, 0);
+	}
+	return success;
+}
+
 void Game::Update() {
 	piece_cells = vector<SDL_Point>();
 	for (auto& pos : controlled_piece->piece_pos) {
@@ -99,17 +105,17 @@ void Game::Update() {
 		prev_pos = controlled_piece->piece_pos;
 		prev_piece_cells = piece_cells;
 		controlled_piece->Accelerate();
-		DetectCollision(false);
+		DetectCollisions(false);
 		controlled_piece->MoveHorizontal();
-		DetectCollision(false);
+		DetectCollisions(false);
 		controlled_piece->TryRotate(controlled_piece->piece_pos);
 		if (controlled_piece->rotated) {
-			DetectCollision(controlled_piece->rotated);
+			DetectCollisions(controlled_piece->rotated);
 		}
 	}
 }
 
-void Game::DetectCollision(bool rotated)
+void Game::DetectCollisions(bool rotated)
 {
 	auto& piece = controlled_piece->piece_pos;
 	for (int i = 0; i < piece.size(); i++) {

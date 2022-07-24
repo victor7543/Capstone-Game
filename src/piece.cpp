@@ -1,6 +1,7 @@
 #include "piece.h"
-#include <cmath>
 #include <iostream>
+#include <fstream>
+#include <random>
 
 Piece::Piece(int grid_width, int grid_height)
 	: grid_width(grid_width),
@@ -114,9 +115,7 @@ void Piece::TryRotate(vector<pair<float, float>>& original_pos)
 		if (PreventOffScreenMovement(original_pos, temp_base_pos)) {
 			base_pos = temp_base_pos;
 		}
-		else {
-			rotated = true;
-		}
+		rotated = true;
 	}
 }
 
