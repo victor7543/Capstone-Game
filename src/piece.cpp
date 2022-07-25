@@ -18,14 +18,19 @@ void Piece::CreatePiece(int grid_width)
 	stream >> json;
 	Uint32 index = RandomizePiece(json.size());
 	auto& piece_data = json[index];
+	short init_offset = 0;
 	for (auto& line : piece_data.items()) {
-		if (line.key() == "cells") {
+		if (line.key() == "init_offset") {
+			init_offset = line.value();
+		}
+		else if (line.key() == "positions") {
+			short start_y_pos = 0;
 			for (auto& json_block_pos : line.value()) {
 				pair<short, short> block_pos = json_block_pos;
 				base_pos.push_back(block_pos);
 				block_pos.first += grid_width / 2;
+				block_pos.second += init_offset;
 				piece_pos.emplace_back(std::move(block_pos));
-				std::cout << line.key() << "\t" << line.value() << std::endl;
 			}
 		}
 		else if (line.key() == "can_rotate") {

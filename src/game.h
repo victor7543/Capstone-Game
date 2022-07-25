@@ -31,12 +31,11 @@ class Game {
   size_t _grid_width;
   size_t _grid_height;
 
-  SDL_AudioSpec wavSpec;
-  Uint32 wavLength;
-  Uint8* wavBuffer;
-  SDL_AudioDeviceID deviceId;
+  Uint32 wavLength = 0;
+  Uint8* wavBuffer = nullptr;
+  SDL_AudioDeviceID deviceId = 0;
 
-  bool InitAudio();
+  bool InitAudio(SDL_AudioSpec& wavSpec);
   void Update();
   void VerifyCompletedRows();
   void DetectCollisions(bool rotated);

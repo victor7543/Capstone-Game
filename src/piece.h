@@ -47,8 +47,8 @@ class Piece {
   const std::string pieces_file = "pieces.json";
   Uint32 horiz_mov_key_timer = 0;
   Uint32 vert_mov_key_timer = 0;
-  Uint32 vert_mov_time_threshold = 200;
-  Uint32 horiz_mov_time_threshold = 200;
+  Uint32 vert_mov_time_threshold = 50;
+  Uint32 horiz_mov_time_threshold = 150;
   bool can_rotate = true;
   json json;
 };

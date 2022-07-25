@@ -24,12 +24,13 @@ void Game::Run(Controller const&controller, Renderer& renderer,
 	Uint32 frame_duration;
 	int frame_count = 0;
 	bool running = true;
+	SDL_AudioSpec wavSpec;{}
 
 
 	if (TTF_Init() < 0) {
 		std::cout << "Error initializing SDL_ttf: " << TTF_GetError() << std::endl;
 	}
-	int audio_queue_success = InitAudio();
+	int audio_queue_success = InitAudio(wavSpec);
 	while (running) {
 		if (SDL_GetQueuedAudioSize(deviceId) == 0 && audio_queue_success == 0) {
 			audio_queue_success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
@@ -69,7 +70,7 @@ void Game::Run(Controller const&controller, Renderer& renderer,
 	TTF_Quit();
 }
 
-bool Game::InitAudio()
+bool Game::InitAudio(SDL_AudioSpec& wavSpec)
 {
 	SDL_LoadWAV("Tetris_theme.wav", &wavSpec, &wavBuffer, &wavLength);
 	deviceId = SDL_OpenAudioDevice(NULL, 0, &wavSpec, NULL, 0);
