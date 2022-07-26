@@ -3,8 +3,8 @@
 #include "SDL.h"
 #include "piece.h"
 
-bool Controller::HandleInput(bool& running, Piece& piece, bool &game_over) const {
-    SDL_Event e;
+bool Controller::HandleInput(bool& running, Piece& piece, bool &game_over) const { // Input behavior is different if the buttons are being held down.
+    SDL_Event e;                                                                 
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {
             running = false;

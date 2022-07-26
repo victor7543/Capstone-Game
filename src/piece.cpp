@@ -12,8 +12,8 @@ Piece::Piece(int grid_width, int grid_height)
 	CreatePiece(grid_width);
 }
 
-void Piece::CreatePiece(int grid_width)
-{
+void Piece::CreatePiece(int grid_width)   // The pieces are specified in the pieces.json file, through their shape, color,
+{                                         // ability to rotate and an offset to their initial position.
 	std::ifstream stream(pieces_file);
 	stream >> json;
 	Uint32 index = RandomizePiece(json.size());
@@ -50,17 +50,17 @@ Uint32 Piece::RandomizePiece(int pieces_count)
 	return distrib(gnrt);
 }
 
-void Piece::MoveVertical() {
+void Piece::MoveVertical() {                            
 	auto prev_pos = current_pos;
 	auto now = SDL_GetTicks();
 	auto time_diff = (now - vert_mov_key_timer);
-	if (acceleration_key_held == false || time_diff >= vert_mov_time_threshold) {
-		float temp_speed_x = speed_x;
+	if (acceleration_key_held == false || time_diff >= vert_mov_time_threshold) {               // the piece will only continue to move if the player has been pressing the button
+		float temp_speed_x = speed_x;															// for a few milliseconds. This is to avoid that the piece becomes hard to control.
 		if (time_diff < vert_mov_time_threshold) {
 			vert_mov_key_timer = SDL_GetTicks();
 		}
 		switch (vert_direction) {
-		case Direction::kDown:
+		case Direction::kDown:  // holding the down key will accelerate the vertical movement.
 			current_pos[0].second += speed_y * 10.0f;
 			for (int i = 1; i < current_pos.size(); i++) {
 				current_pos[i].second = current_pos[0].second + basic_shape[i].second;
@@ -75,15 +75,15 @@ void Piece::MoveVertical() {
 	for (int i = 1; i < current_pos.size(); i++) {
 		current_pos[i].second = current_pos[0].second + basic_shape[i].second;
 	}
-	WindowBorderCollision(prev_pos);
+	WindowBorderCollision(prev_pos);  // If the piece goes out of bounds the movement will be invalidated.
 }
 
 void Piece::MoveHorizontal() {
 	auto prev_pos = current_pos;
 	auto now = SDL_GetTicks();
 	auto time_diff = (now - horiz_mov_key_timer);
-	if (horiz_key_held == false || time_diff >= horiz_mov_time_threshold) {
-		float temp_speed_x = speed_x;
+	if (horiz_key_held == false || time_diff >= horiz_mov_time_threshold) { // the piece will only continue to move if the player has been pressing the button
+		float temp_speed_x = speed_x;                                       // for a few milliseconds. This is to avoid that the piece becomes hard to control.
 		if (time_diff < horiz_mov_time_threshold) {
 			horiz_mov_key_timer = SDL_GetTicks();
 		}
@@ -108,23 +108,23 @@ void Piece::MoveHorizontal() {
 		}
 	}
 	horiz_direction = Direction::kNull;
-	WindowBorderCollision(prev_pos);
+	WindowBorderCollision(prev_pos);      // If the piece goes out of bounds the movement will be invalidated.
 }
 
 void Piece::TryRotate()
 {
-	if (can_rotate && rotate_key_held && is_rotated == false) {
+	if (can_rotate && rotate_key_held && is_rotated == false) {  // holding down the rotation key should not make the piece rotate more than once.
 		vector<pair<float, float>> unrotated_shape = basic_shape;
 		Rotate(RotationDirection::Clockwise);
 		rotate_key_held = false;
-		if (WindowBorderCollision()) {
+		if (WindowBorderCollision()) { //if the rotation made any part of the piece go beyond the border of the window the rotation will be invalidated.
 			basic_shape = unrotated_shape;
 		}
 		is_rotated = true;
 	}
 }
 
-void Piece::Rotate(RotationDirection const &rot_dir)
+void Piece::Rotate(RotationDirection const &rot_dir) 
 {
 	auto unrotated_shape = basic_shape;
 	for (int i = 1; i < basic_shape.size(); i++) {

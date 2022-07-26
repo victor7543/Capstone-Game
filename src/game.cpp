@@ -32,7 +32,7 @@ void Game::Run(Controller const&controller, Renderer& renderer,
 	}
 	int audio_queue_success = InitAudio(wavSpec);
 	while (running) {
-		if (SDL_GetQueuedAudioSize(deviceId) == 0 && audio_queue_success == 0) {
+		if (SDL_GetQueuedAudioSize(deviceId) == 0 && audio_queue_success == 0) {  // this is necessary to keep the audio playing.
 			audio_queue_success = SDL_QueueAudio(deviceId, wavBuffer, wavLength);
 		}
 		frame_start = SDL_GetTicks();
@@ -91,8 +91,8 @@ void Game::Update() {
 			)));
 		}
 		if (!controlled_piece->is_falling) {
-			filled_cells.insert(std::end(filled_cells), std::begin(piece_cells), std::end(piece_cells));
-			CheckCompletedRows();
+			filled_cells.insert(std::end(filled_cells), std::begin(piece_cells), std::end(piece_cells)); // inserts the cells of the controlled piece into 
+			CheckCompletedRows();                                                                        // filled cells vector.
 			if (CheckGameOver()) {
 				return;
 			}
@@ -159,15 +159,15 @@ bool Game::DetectCollisions()
 	return false;
 }
 
-void Game::CheckCompletedRows()
+void Game::CheckCompletedRows() // makes the completed row disappear and the rows above fall down to fill the empty space.
 {
 	vector<SDL_Point> filled_cells_temp = filled_cells;
 	int deleted_cells = 0;
 	int sequence = 0;
-	for (int i = 20; i >= 0; i--) {
+	for (int i = 20; i >= 0; i--) { // for each row
 		for (int j = 1; j <= filled_cells_temp.size(); j++) {
-			if (filled_cells_temp[j-1].y == i) {
-				filled_cells_temp.erase(filled_cells_temp.begin() + j-1);
+			if (filled_cells_temp[j-1].y == i) { // every cell present in the current row will be deleted from the temporary vector,
+				filled_cells_temp.erase(filled_cells_temp.begin() + j-1); // but that vector will only become the main one if a full row was deleted
 				deleted_cells++;
 				j--;
 			}
@@ -177,12 +177,12 @@ void Game::CheckCompletedRows()
 		}
 		if (deleted_cells >= 10) {
 			filled_cells = filled_cells_temp;
-			score += 100 * pow(2, sequence);
-			sequence += 1;
+			score += 100 * pow(2, sequence); // the score is increased if you manage to complete a row, 
+			sequence += 1;					 // but the increase is bigger if you manage to complete multiple rows at once.
 			i++;
 		}
 		else { 
-			filled_cells_temp = filled_cells;
+			filled_cells_temp = filled_cells; //if there was no complete row the temp vector is discarded.
 		}
 		deleted_cells = 0;
 	}
