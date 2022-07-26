@@ -111,13 +111,13 @@ void Piece::MoveHorizontal() {
 	WindowBorderCollision(prev_pos);
 }
 
-void Piece::TryRotate(vector<pair<float, float>> const& original_pos)
+void Piece::TryRotate()
 {
 	if (can_rotate && rotate_key_held && is_rotated == false) {
 		vector<pair<float, float>> unrotated_shape = basic_shape;
 		Rotate(RotationDirection::Clockwise);
 		rotate_key_held = false;
-		if (WindowBorderCollision(original_pos, unrotated_shape)) {
+		if (WindowBorderCollision()) {
 			basic_shape = unrotated_shape;
 		}
 		is_rotated = true;
@@ -165,26 +165,11 @@ bool Piece::WindowBorderCollision(vector<pair<float, float>> const& prev_pos)
 	return false;
 }
 
-bool Piece::WindowBorderCollision(vector<pair<float, float>> const& prev_pos, vector<pair<float, float>>& previous_rotation)
+bool Piece::WindowBorderCollision()
 {
 	for (int i = 0; i < current_pos.size(); i++) {
-		if (current_pos[i].second > grid_height || current_pos[i].second < 0) {
-			current_pos[0].first = prev_pos[0].first;
-			current_pos[0].second = prev_pos[0].second;
-			for (int i = 1; i < current_pos.size(); i++) {
-				current_pos[i].first = current_pos[0].first + previous_rotation[i].first;
-				current_pos[i].second = current_pos[0].second + previous_rotation[i].second;
-			}
-			if (current_pos[i].second > grid_height) {
-				this->is_falling = false;
-			}
-			return true;
-		}
-		else if (current_pos[i].first >= grid_width || current_pos[i].first < 0.0) {
-			current_pos[0].first = prev_pos[0].first;
-			for (int i = 1; i < current_pos.size(); i++) {
-				current_pos[i].first = current_pos[0].first + previous_rotation[i].first;
-			}
+		if (current_pos[i].second > grid_height || current_pos[i].second < 0 || current_pos[i].first >= grid_width || current_pos[i].first < 0.0) {
+			Rotate(RotationDirection::Counter_Clockwise);
 			return true;
 		}
 	}

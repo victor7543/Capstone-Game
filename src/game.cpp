@@ -104,7 +104,7 @@ void Game::Update() {
 		ValidateVerticalMovement();
 		controlled_piece->MoveHorizontal();
 		ValidateHorizontalMovement();
-		controlled_piece->TryRotate(controlled_piece->current_pos);
+		controlled_piece->TryRotate();
 		if (controlled_piece->is_rotated) {
 			ValidateRotation();
 		}

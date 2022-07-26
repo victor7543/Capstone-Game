@@ -18,7 +18,7 @@ class Piece {
 
   void MoveHorizontal();
   void MoveVertical();
-  void TryRotate(vector<pair<float, float>> const& prev_piece);
+  void TryRotate();
   void Rotate(RotationDirection const &rot_dir);
 
   bool is_rotated = false;
@@ -39,7 +39,7 @@ class Piece {
  private:
   void CreatePiece(int grid_width);
   bool WindowBorderCollision(vector<pair<float, float>> const& prev_pos);
-  bool WindowBorderCollision(vector<pair<float, float>> const& prev_pos, vector<pair<float, float>>& previous_rotation);
+  bool WindowBorderCollision();
  
   Uint32 RandomizePiece(int pieces_count);
   Direction prev_dir = Direction::kNull;
