@@ -38,11 +38,11 @@ void Game::Run(Controller const&controller, Renderer& renderer,
 		frame_start = SDL_GetTicks();
 
 		// Input, Update, Render - the main game loop.
-		if (controller.HandleInput(running, *controlled_piece, is_game_over)) {
+		if (controller.HandleInput(running, *controlled_piece, game_over)) {
 			ResetGame();
 		}
 		Update();
-		renderer.Render(filled_cells, *controlled_piece, score, is_game_over);
+		renderer.Render(filled_cells, *controlled_piece, score, game_over);
 
 		frame_end = SDL_GetTicks();
 
@@ -82,77 +82,84 @@ bool Game::InitAudio(SDL_AudioSpec& wavSpec)
 }
 
 void Game::Update() {
-	piece_cells = vector<SDL_Point>();
-	for (auto& pos : controlled_piece->piece_pos) {
-		piece_cells.emplace_back(std::move(SDL_Point(
-			static_cast<int>(pos.first),
-			static_cast<int>(pos.second)
-		)));
-	}
-	if (!controlled_piece->is_falling && !is_game_over) {
-		for (auto cell : piece_cells) {
-			if (cell.y <= 0) {
-				is_game_over = true;
-				break;
-			}
+	if (!game_over) {
+		piece_cells = vector<SDL_Point>();
+		for (auto& pos : controlled_piece->current_pos) {
+			piece_cells.emplace_back(std::move(SDL_Point(
+				static_cast<int>(pos.first),
+				static_cast<int>(pos.second)
+			)));
 		}
-		if (!is_game_over) {
+		if (!controlled_piece->is_falling) {
 			filled_cells.insert(std::end(filled_cells), std::begin(piece_cells), std::end(piece_cells));
-			VerifyCompletedRows();
+			CheckCompletedRows();
+			if (CheckGameOver()) {
+				return;
+			}
 			controlled_piece = make_unique<Piece>(_grid_width, _grid_height);
 		}
-	}
-	else if (!is_game_over) {
-		prev_pos = controlled_piece->piece_pos;
+		prev_pos = controlled_piece->current_pos;
 		prev_piece_cells = piece_cells;
-		controlled_piece->Accelerate();
-		DetectCollisions(false);
+		controlled_piece->MoveVertical();
+		ValidateVerticalMovement();
 		controlled_piece->MoveHorizontal();
-		DetectCollisions(false);
-		controlled_piece->TryRotate(controlled_piece->piece_pos);
-		if (controlled_piece->rotated) {
-			DetectCollisions(controlled_piece->rotated);
+		ValidateHorizontalMovement();
+		controlled_piece->TryRotate(controlled_piece->current_pos);
+		if (controlled_piece->is_rotated) {
+			ValidateRotation();
 		}
 	}
 }
 
-void Game::DetectCollisions(bool rotated)
+void Game::ValidateVerticalMovement()
 {
-	auto& piece = controlled_piece->piece_pos;
-	for (int i = 0; i < piece.size(); i++) {
-		controlled_piece->prev_block_pos = piece[i];
+	if (DetectCollisions()) {
+		controlled_piece->current_pos[0] = prev_pos[0];
+		for (int j = 1; j < controlled_piece->current_pos.size(); j++) {
+			controlled_piece->current_pos[j].first = controlled_piece->current_pos[0].first + controlled_piece->basic_shape[j].first;
+			controlled_piece->current_pos[j].second = controlled_piece->current_pos[0].second + controlled_piece->basic_shape[j].second;
+		}
+		controlled_piece->is_falling = false;
+	}
+}
+
+void Game::ValidateHorizontalMovement()
+{
+	if (DetectCollisions()) {
+		controlled_piece->current_pos[0].first = prev_pos[0].first;
+		for (int j = 1; j < controlled_piece->current_pos.size(); j++) {
+			controlled_piece->current_pos[j].first = controlled_piece->current_pos[0].first + controlled_piece->basic_shape[j].first;
+		}
+	}
+}
+
+void Game::ValidateRotation()
+{
+	if (DetectCollisions()) {
+		controlled_piece->Rotate(Piece::RotationDirection::Counter_Clockwise); // The piece is just going back to it's previous rotation, which is a valid position.
+	}
+}
+
+bool Game::DetectCollisions()
+{
+	for (int i = 0; i < controlled_piece->current_pos.size(); i++) {
+		controlled_piece->prev_block_pos = controlled_piece->current_pos[i];
 		SDL_Point current_cell{
-			static_cast<int>(piece[i].first),
-			static_cast<int>(piece[i].second)
+			static_cast<int>(controlled_piece->current_pos[i].first),
+			static_cast<int>(controlled_piece->current_pos[i].second)
 		};
 		for (auto const& filled_cell : filled_cells) {
 			if (current_cell.x != prev_piece_cells[i].x || current_cell.y != prev_piece_cells[i].y) { // The piece has changed cells since last update
 				if (current_cell.x == filled_cell.x && current_cell.y == filled_cell.y) { // The piece is intersecting with a filled cell.
-					if (rotated) {
-						controlled_piece->Rotate(controlled_piece->base_pos, Piece::RotationDirection::Counter_Clockwise); // The piece is just going back to it's previous rotation, which is a valid position.
-						return;
-					}
-					if (current_cell.x == prev_piece_cells[i].x) {
-						piece[0] = prev_pos[0];
-						for (int j = 1; j < piece.size(); j++) {
-							piece[j].first = piece[0].first + controlled_piece->base_pos[j].first;
-							piece[j].second = piece[0].second + controlled_piece->base_pos[j].second;
-						}
-						controlled_piece->is_falling = false;
-						return;
-					}
-					piece[0].first = prev_pos[0].first;
-					for (int j = 1; j < piece.size(); j++) {
-						piece[j].first = piece[0].first + controlled_piece->base_pos[j].first;
-					}
-					return;
+					return true;
 				}
 			}
 		}
 	}
+	return false;
 }
 
-void Game::VerifyCompletedRows()
+void Game::CheckCompletedRows()
 {
 	vector<SDL_Point> temp_filled_cells = filled_cells;
 	int deleted_cells = 0;
@@ -182,10 +189,21 @@ void Game::VerifyCompletedRows()
 	sequence = 0;
 }
 
+bool Game::CheckGameOver()
+{
+	for (SDL_Point& cell : piece_cells) {
+		if (cell.y <= 0) {
+			game_over = true;
+			return true;
+		}
+	}
+	return false;
+}
+
 void Game::ResetGame()
 {
 	filled_cells = vector<SDL_Point>();
 	score = 0;
-	is_game_over = false;
+	game_over = false;
 	controlled_piece = make_unique<Piece>(_grid_width, _grid_height);
 }

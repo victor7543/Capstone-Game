@@ -39,7 +39,7 @@ Renderer::~Renderer() {
   SDL_Quit();
 }
 
-void Renderer::Render(std::vector<SDL_Point>& cells_vec, Piece const &piece, int score, bool is_game_over) {
+void Renderer::Render(std::vector<SDL_Point>& cells_vec, Piece const &piece, int score, bool game_over) {
   SDL_Rect block;
   block.w = screen_width / grid_width;
   block.h = screen_height / grid_height;
@@ -51,11 +51,11 @@ void Renderer::Render(std::vector<SDL_Point>& cells_vec, Piece const &piece, int
   for (int i = 0; i < cells_vec.size(); i++) {
       RenderFilledCells(cells_vec[i], block);
   } 
-  for (auto& cell : piece.piece_pos) {
+  for (auto& cell : piece.current_pos) {
       RenderPiece(SDL_Point(static_cast<int>(cell.first), static_cast<int>(cell.second)), block, piece);
   }
   RenderScore(score);
-  if (is_game_over) {
+  if (game_over) {
       RenderGameOver(score);
   }
   SDL_RenderPresent(sdl_renderer);

@@ -26,7 +26,7 @@ class Game {
   vector<SDL_Point> prev_piece_cells;
   vector<pair<float, float>> prev_pos;
 
-  bool is_game_over = false;
+  bool game_over = false;
   int score = 0;
   size_t _grid_width;
   size_t _grid_height;
@@ -37,8 +37,12 @@ class Game {
 
   bool InitAudio(SDL_AudioSpec& wavSpec);
   void Update();
-  void VerifyCompletedRows();
-  void DetectCollisions(bool rotated);
+  void CheckCompletedRows();
+  bool DetectCollisions();
+  void ValidateVerticalMovement();
+  void ValidateHorizontalMovement();
+  void ValidateRotation();
+  bool CheckGameOver();
   void ResetGame();
 };
 

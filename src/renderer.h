@@ -17,7 +17,7 @@ class Renderer {
            const size_t grid_width, const size_t grid_height);
   ~Renderer();
 
-  void Render(std::vector<SDL_Point> &piece_vec, Piece const &piece, int score, bool is_game_over);
+  void Render(std::vector<SDL_Point> &piece_vec, Piece const &piece, int score, bool game_over);
   void UpdateWindowTitle(int score, int fps);
 
  private:

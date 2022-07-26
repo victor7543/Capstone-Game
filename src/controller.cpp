@@ -3,14 +3,14 @@
 #include "SDL.h"
 #include "piece.h"
 
-bool Controller::HandleInput(bool& running, Piece& piece, bool &is_game_over) const {
+bool Controller::HandleInput(bool& running, Piece& piece, bool &game_over) const {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {
             running = false;
             return false;
         }
-        else if (is_game_over && e.type == SDL_KEYDOWN) {
+        else if (game_over && e.type == SDL_KEYDOWN) {
             return true;
         }
     }
@@ -22,7 +22,7 @@ bool Controller::HandleInput(bool& running, Piece& piece, bool &is_game_over) co
         rotate_key_already_pressed = true;
     }
     else {
-        piece.rotated = false;
+        piece.is_rotated = false;
         piece.rotate_key_held = false;
         rotate_key_already_pressed = false;
     }
