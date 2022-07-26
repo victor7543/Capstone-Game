@@ -51,8 +51,10 @@ void Renderer::Render(std::vector<SDL_Point>& cells_vec, Piece const &piece, int
   for (int i = 0; i < cells_vec.size(); i++) {
       RenderFilledCells(cells_vec[i], block);
   } 
-  for (auto& cell : piece.current_pos) {
-      RenderPiece(SDL_Point(static_cast<int>(cell.first), static_cast<int>(cell.second)), block, piece);
+  if (!game_over) {
+      for (auto& cell : piece.current_pos) {
+          RenderPiece(SDL_Point(static_cast<int>(cell.first), static_cast<int>(cell.second)), block, piece);
+      }
   }
   RenderScore(score);
   if (game_over) {
@@ -110,6 +112,7 @@ void Renderer::RenderScore(int score)
     SDL_RenderCopy(sdl_renderer, Message, NULL, &Message_rect);
     SDL_DestroyTexture(Message);
     SDL_FreeSurface(surfaceMessage);
+    TTF_CloseFont(Arial);
 }
 
 void Renderer::RenderGameOver(int score)
@@ -128,6 +131,7 @@ void Renderer::RenderGameOver(int score)
     SDL_RenderCopy(sdl_renderer, Message, NULL, &Message_rect);
     SDL_DestroyTexture(Message);
     SDL_FreeSurface(surfaceMessage);
+    TTF_CloseFont(Arial);
 }
 
 void Renderer::UpdateWindowTitle(int score, int fps) {

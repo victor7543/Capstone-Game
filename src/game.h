@@ -25,6 +25,7 @@ class Game {
   vector<SDL_Point> piece_cells;
   vector<SDL_Point> prev_piece_cells;
   vector<pair<float, float>> prev_pos;
+  SDL_Point current_cell = {};
 
   bool game_over = false;
   int score = 0;

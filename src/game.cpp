@@ -144,7 +144,7 @@ bool Game::DetectCollisions()
 {
 	for (int i = 0; i < controlled_piece->current_pos.size(); i++) {
 		controlled_piece->prev_block_pos = controlled_piece->current_pos[i];
-		SDL_Point current_cell{
+		current_cell = {
 			static_cast<int>(controlled_piece->current_pos[i].first),
 			static_cast<int>(controlled_piece->current_pos[i].second)
 		};
@@ -161,28 +161,28 @@ bool Game::DetectCollisions()
 
 void Game::CheckCompletedRows()
 {
-	vector<SDL_Point> temp_filled_cells = filled_cells;
+	vector<SDL_Point> filled_cells_temp = filled_cells;
 	int deleted_cells = 0;
 	int sequence = 0;
 	for (int i = 20; i >= 0; i--) {
-		for (int j = 1; j <= temp_filled_cells.size(); j++) {
-			if (temp_filled_cells[j-1].y == i) {
-				temp_filled_cells.erase(temp_filled_cells.begin() + j-1);
+		for (int j = 1; j <= filled_cells_temp.size(); j++) {
+			if (filled_cells_temp[j-1].y == i) {
+				filled_cells_temp.erase(filled_cells_temp.begin() + j-1);
 				deleted_cells++;
 				j--;
 			}
-			else if (temp_filled_cells[j - 1].y < i) {
-				temp_filled_cells[j - 1].y++;
+			else if (filled_cells_temp[j-1].y < i) {
+				filled_cells_temp[j-1].y++;
 			}
 		}
 		if (deleted_cells >= 10) {
-			filled_cells = temp_filled_cells;
+			filled_cells = filled_cells_temp;
 			score += 100 * pow(2, sequence);
 			sequence += 1;
 			i++;
 		}
 		else { 
-			temp_filled_cells = filled_cells;
+			filled_cells_temp = filled_cells;
 		}
 		deleted_cells = 0;
 	}
