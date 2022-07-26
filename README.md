@@ -42,6 +42,10 @@ All class members that are set to argument values are initialized through member
 ### Overloaded functions allow the same function to operate on different parameters.
 The WindowBorderCollision() function was overloaded with different signatures for the same function name (piece.h line 41).
 
+## Credits
+This game uses a .wav file coneverted from the original .ogg for the music. It was made by Bogozi and is licenced uder the Creative Commons Attribution-Share Alike 3.0 Unported https://creativecommons.org/licenses/by-sa/3.0/deed.en
+https://commons.wikimedia.org/wiki/File:Tetris_theme.ogg
+
 ## Dependencies for Running Locally
 * cmake >= 3.7
   * All OSes: [click here for installation instructions](https://cmake.org/install/)
