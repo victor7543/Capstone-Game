@@ -5,16 +5,18 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Resource Files\fonts">
       <UniqueIdentifier>{af3544d2-ecdc-47b4-956c-1d980ef48723}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{4ad80aa6-dc43-4e3f-b404-ded24d9d885f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{6eb7b185-0ce2-4733-b490-a977e3d94f24}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -35,59 +37,80 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\controller.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\piece.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="json.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="pieces.json">
-      <Filter>Resource Files</Filter>
+    <None Include="assets\pieces.json">
+      <Filter>assets</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Media Include="Tetris_theme.wav">
-      <Filter>Resource Files</Filter>
+    <Media Include="assets\Tetris_theme.wav">
+      <Filter>assets</Filter>
     </Media>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="arial.ttf">
+    <Font Include="assets\fonts\Aileron-Black.otf">
       <Filter>Resource Files\fonts</Filter>
     </Font>
-    <Font Include="arialbd.ttf">
+    <Font Include="assets\fonts\Aileron-BlackItalic.otf">
       <Filter>Resource Files\fonts</Filter>
     </Font>
-    <Font Include="arialbi.ttf">
+    <Font Include="assets\fonts\Aileron-Bold.otf">
       <Filter>Resource Files\fonts</Filter>
     </Font>
-    <Font Include="ariali.ttf">
+    <Font Include="assets\fonts\Aileron-BoldItalic.otf">
       <Filter>Resource Files\fonts</Filter>
     </Font>
-    <Font Include="ARIALN.TTF">
+    <Font Include="assets\fonts\Aileron-Heavy.otf">
       <Filter>Resource Files\fonts</Filter>
     </Font>
-    <Font Include="ARIALNB.TTF">
+    <Font Include="assets\fonts\Aileron-HeavyItalic.otf">
       <Filter>Resource Files\fonts</Filter>
     </Font>
-    <Font Include="ARIALNBI.TTF">
+    <Font Include="assets\fonts\Aileron-Italic.otf">
       <Filter>Resource Files\fonts</Filter>
     </Font>
-    <Font Include="ARIALNI.TTF">
+    <Font Include="assets\fonts\Aileron-Light.otf">
       <Filter>Resource Files\fonts</Filter>
     </Font>
-    <Font Include="ariblk.ttf">
+    <Font Include="assets\fonts\Aileron-LightItalic.otf">
       <Filter>Resource Files\fonts</Filter>
     </Font>
+    <Font Include="assets\fonts\Aileron-Regular.otf">
+      <Filter>Resource Files\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\Aileron-SemiBold.otf">
+      <Filter>Resource Files\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\Aileron-SemiBoldItalic.otf">
+      <Filter>Resource Files\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\Aileron-Thin.otf">
+      <Filter>Resource Files\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\Aileron-ThinItalic.otf">
+      <Filter>Resource Files\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\Aileron-UltraLight.otf">
+      <Filter>Resource Files\fonts</Filter>
+    </Font>
+    <Font Include="assets\fonts\Aileron-UltraLightItalic.otf">
+      <Filter>Resource Files\fonts</Filter>
+    </Font>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\controller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\json.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\piece.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

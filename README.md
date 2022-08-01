@@ -56,6 +56,9 @@ https://commons.wikimedia.org/wiki/File:Tetris_theme.ogg
 * SDL2 >= 2.0
   * All installation instructions can be found [here](https://wiki.libsdl.org/Installation)
   >Note that for Linux, an `apt` or `apt-get` installation is preferred to building from source. 
+* SDL_TTF >= 2.0
+  * Find the lastest version here: https://github.com/libsdl-org/SDL_ttf/releases or use the command: "sudo apt-get install -y libsdl2-ttf-dev" on linux.
+  >Note that for Linux, an `apt` or `apt-get` installation is preferred to building from source. 
 * gcc/g++ >= 5.4
   * Linux: gcc / g++ is installed by default on most Linux distros
   * Mac: same deal as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)

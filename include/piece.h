@@ -2,7 +2,7 @@
 #define PIECE_H
 
 #include <vector>
-#include "SDL.h"
+#include <SDL.h>
 #include "json.hpp"
 
 using json = nlohmann::json;
@@ -45,13 +45,13 @@ class Piece {
   Direction prev_dir = Direction::kNull;
   int grid_width = 0;
   int grid_height = 0;
-  const std::string pieces_file = "pieces.json";
+  const std::string pieces_data_file_path = "assets/data/pieces.json";
   Uint32 horiz_mov_key_timer = 0;
   Uint32 vert_mov_key_timer = 0;
   Uint32 vert_mov_time_threshold = 50;
   Uint32 horiz_mov_time_threshold = 150;
   bool can_rotate = true;
-  json json = {};
+  json json_file;
 };
 
 #endif

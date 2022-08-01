@@ -1,8 +1,12 @@
 #ifndef GAME_H
 #define GAME_H
+#ifndef SDL_MAIN_HANDLED
+    #define SDL_MAIN_HANDLED
+    #include <SDL.h>
+#endif
 
 #include <vector>
-#include "SDL.h"
+#include <memory>
 
 using std::vector;
 using std::unique_ptr;
@@ -11,7 +15,6 @@ using std::pair;
 class Controller;
 class Renderer;
 class Piece;
-class SDL_Point;
 
 class Game {
  public:
@@ -20,7 +23,6 @@ class Game {
            std::size_t target_frame_duration);
 
  private:
-  unique_ptr<Piece> controlled_piece;
   vector<SDL_Point> filled_cells;
   vector<SDL_Point> piece_cells;
   vector<SDL_Point> prev_piece_cells;
@@ -29,12 +31,13 @@ class Game {
 
   bool game_over = false;
   int score = 0;
-  size_t _grid_width;
-  size_t _grid_height;
-
+  size_t _grid_width = 0;
+  size_t _grid_height = 0;
+  unique_ptr<Piece> controlled_piece = nullptr;
   Uint32 wavLength = 0;
   Uint8* wavBuffer = nullptr;
-  SDL_AudioDeviceID deviceId = 0;
+  SDL_AudioDeviceID deviceId = UINT32_MAX;
+  const char* audio_file_path = "assets/audio/Tetris_theme.wav";
 
   bool InitAudio(SDL_AudioSpec& wavSpec);
   void Update();

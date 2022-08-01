@@ -78,7 +78,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\git\Capstone-Game\Capstone-Game;I:\SDL2\include;$(IncludePath)</IncludePath>
+    <IncludePath>I:\SDL2\include;I:\git\Capstone-Game\Capstone-Game\include;$(IncludePath)</IncludePath>
     <LibraryPath>I:\SDL2\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,28 +158,35 @@
     <ClCompile Include="src\piece.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="json.hpp" />
-    <ClInclude Include="src\controller.h" />
-    <ClInclude Include="src\game.h" />
-    <ClInclude Include="src\renderer.h" />
-    <ClInclude Include="src\piece.h" />
+    <None Include="assets\pieces.json" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="pieces.json" />
+    <Media Include="assets\Tetris_theme.wav" />
   </ItemGroup>
   <ItemGroup>
-    <Media Include="Tetris_theme.wav" />
+    <Font Include="assets\fonts\Aileron-Black.otf" />
+    <Font Include="assets\fonts\Aileron-BlackItalic.otf" />
+    <Font Include="assets\fonts\Aileron-Bold.otf" />
+    <Font Include="assets\fonts\Aileron-BoldItalic.otf" />
+    <Font Include="assets\fonts\Aileron-Heavy.otf" />
+    <Font Include="assets\fonts\Aileron-HeavyItalic.otf" />
+    <Font Include="assets\fonts\Aileron-Italic.otf" />
+    <Font Include="assets\fonts\Aileron-Light.otf" />
+    <Font Include="assets\fonts\Aileron-LightItalic.otf" />
+    <Font Include="assets\fonts\Aileron-Regular.otf" />
+    <Font Include="assets\fonts\Aileron-SemiBold.otf" />
+    <Font Include="assets\fonts\Aileron-SemiBoldItalic.otf" />
+    <Font Include="assets\fonts\Aileron-Thin.otf" />
+    <Font Include="assets\fonts\Aileron-ThinItalic.otf" />
+    <Font Include="assets\fonts\Aileron-UltraLight.otf" />
+    <Font Include="assets\fonts\Aileron-UltraLightItalic.otf" />
   </ItemGroup>
   <ItemGroup>
-    <Font Include="arial.ttf" />
-    <Font Include="arialbd.ttf" />
-    <Font Include="arialbi.ttf" />
-    <Font Include="ariali.ttf" />
-    <Font Include="ARIALN.TTF" />
-    <Font Include="ARIALNB.TTF" />
-    <Font Include="ARIALNBI.TTF" />
-    <Font Include="ARIALNI.TTF" />
-    <Font Include="ariblk.ttf" />
+    <ClInclude Include="include\controller.h" />
+    <ClInclude Include="include\game.h" />
+    <ClInclude Include="include\json.hpp" />
+    <ClInclude Include="include\piece.h" />
+    <ClInclude Include="include\renderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

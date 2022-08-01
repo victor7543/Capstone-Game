@@ -2,7 +2,7 @@
 #define RENDERER_H
 
 #include <vector>
-#include "SDL.h"
+#include <SDL.h>
 #include "piece.h"
 
 using std::size_t;
@@ -26,11 +26,12 @@ class Renderer {
   SDL_Window *sdl_window;
   SDL_Renderer *sdl_renderer;
   void RenderScore(int score);
-  void RenderGameOver(int score);
+  void RenderGameOver();
   const size_t screen_width;
   const size_t screen_height;
   const size_t grid_width;
   const size_t grid_height;
+  const char* font_path = "assets/fonts/Aileron-Regular.otf";
 };
 
 #endif

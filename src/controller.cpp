@@ -1,6 +1,6 @@
 #include <iostream>
 #include "controller.h"
-#include "SDL.h"
+#include <SDL.h>
 #include "piece.h"
 
 bool Controller::HandleInput(bool& running, Piece& piece, bool &game_over) const { // Input behavior is different if the buttons are being held down.
