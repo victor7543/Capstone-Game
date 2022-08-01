@@ -159,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\pieces.json" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="assets\Tetris_theme.wav" />

@@ -6,7 +6,8 @@ Made in C++ using the SDL2 library.
 Just like classic Tetris, there are 7 types of pieces that keep descending from the top of the screen in random order.
 The player controls each piece as they fall, trying to complete lines in order to score points and prevent the pieces from
 reaching the top of the screen. Each line completed will earn the player 100 points and make that line disappear, and if the player manages to complete multiple lines at once there is a score multiplier. The pieces can collide with each other and will pile up until they reach the top of the screen. When that happens the game is over.
-
+## Controls
+Use the left and right arrows <- -> to move the piece around, the up arrow to rotate the piece and the down arrow to accelerate it's movement.'
 ## Code structure
 The main function will create a Renderer, a Controller and a Game object, and then call Run() from the Game object, passing the other objects as arguments. The Run function will initialize the audio and start the game loop, which will keep calling the HandleInput, Update and Render functions until the application finishes.
 
@@ -28,7 +29,7 @@ Tetris_theme.wav is the audio file.
 The project compiles and runs without errors.
 ### The project demonstrates an understanding of C++ functions and control structures 
 The code is organized into functions and makes use of while loops, for loops, if conditions and switch statements
-(game.cpp line 162, game.cpp line 87, game.cpp line 34, piece.cpp line 62, piece.cpp 93, controller.cpp line 8, piece.cpp line 22).
+(game.cpp line 151, game.cpp line 39, game.cpp line 35, piece.cpp line 65, piece.cpp 92, controller.cpp line 8, piece.cpp line 24).
 ### The project reads data from a file and process the data, or the program writes data to a file.
 The project read from a json file to get the pieces specifications (piece.cpp line 17).
 ### The project accepts user input and processes the input.
@@ -38,7 +39,7 @@ The project code is organized into classes with class attributes to hold the dat
 ### Classes use appropriate access specifiers for class members.
 All class data members are explicitly specified as public, protected, or private (all header files).
 ### Class constructors utilize member initialization lists.
-All class members that are set to argument values are initialized through member initialization lists (piece.cpp line 6, game.cpp line 11, renderer.cpp line 6).
+All class members that are set to argument values are initialized through member initialization lists (piece.cpp line 6, game.cpp line 17, renderer.cpp line 12).
 ### Overloaded functions allow the same function to operate on different parameters.
 The WindowBorderCollision() function was overloaded with different signatures for the same function name (piece.h line 41).
 
